@@ -48,6 +48,24 @@ public class conexiones {
         }
 
     }
+    
+     public void insertarPreso(String _codigo_preso, String _dni, String _nombre, String _apellidos, String _fecha_nacimiento, 
+             String _lugar_nacimiento, String _nacionalidad, String _estatura, String _color_piel, String _banda, String _fotoPreso) {
+        try {
+            // Crea un statement
+            Statement sta = conn1.createStatement();
+            // Ejecuta la inserción
+            sta.executeUpdate("INSERT INTO `preso` (`codigo_preso`, `dni`, `nombre`, `apellidos`, `fecha_nacimiento`, `lugar_nacimiento`,"
+                    + " `nacionalidad`, `estatura`, `color_piel`, `banda`, `fotoPreso`) VALUES "
+                    + "('" + _codigo_preso + "' , '" + _dni + "', '"+ _nombre + "', '"+ _apellidos + "', '"+ _fecha_nacimiento 
+                    + "', '"+ _lugar_nacimiento + "', '"+ _nacionalidad + "', '"+ _estatura + "', '"+ _color_piel + "', '"+ _banda + "', '"+ _fotoPreso + "' );");
+            // Cierra el statement
+            sta.close();
+        } catch (SQLException ex) {
+            System.out.println("ERROR:al hacer un Insert");
+            ex.printStackTrace();
+        }
+    }
 
     public void insertarDelitoPreso(String _id, String codigoDelito, String circunstancias, String ubicacion) {
         try {
@@ -61,6 +79,32 @@ public class conexiones {
         } catch (SQLException ex) {
             System.out.println("ERROR:al hacer un Insert");
             ex.printStackTrace();
+        }
+    }
+    
+    public int insertarDelitoPresoNuevoDelito(String _id, String codigoDelito, String circunstancias, String ubicacion, String descripcion, String condena) {
+         try {
+            conn1.setAutoCommit(false);
+            Statement sta = conn1.createStatement();
+            sta.executeUpdate("INSERT INTO `delito` (`codigo_delito`, `descripcion`, `condena`)"
+                    + "VALUES ( " + codigoDelito + ", '" + descripcion + "', " + condena + ")");
+            sta.executeUpdate("INSERT INTO preso_delito (`codigo_preso`, `codigo_delito`, `circustancias`, `ubicacion`)"
+                    + "VALUES ('" + _id + "' , " + codigoDelito + ", '"+ circunstancias + "', '"+ ubicacion + "' );");
+            conn1.commit();
+             conn1.setAutoCommit(true);
+            return 0;
+        } catch (SQLException ex) {           
+            System.out.println("ERROR:al hacer un Insert");
+            try {
+                if (conn1 != null) {
+                    conn1.rollback();
+                }               
+            } catch (SQLException se2) {
+                se2.printStackTrace();
+                
+            }           
+            ex.printStackTrace();           
+            return 1;
         }
     }
     
@@ -94,32 +138,7 @@ public class conexiones {
         return res;
     }
 
-    // En caso de que se vaya a introducir un libro junto a una editorial utilizamos este metodo 
-    // ya que quitamos el autocommit y con el rollback nos aseguramos de que si la conexion se piede cuando 
-    // solo hemos introducido el album y no la concion volveriamos al comienzo en veez de dejar las transaccion a medias 
-    public void insertar_con_commit(String titulo, String duracion, String letras, int id, int album,
-            int _id, int _publicacion, String _titulo) {
-
-        try {
-            conn1.setAutoCommit(false);
-            Statement sta = conn1.createStatement();
-            sta.executeUpdate("INSERT INTO album (`id`, `titulo`, `publicacion`)"
-                    + "VALUES ( " + _id + ", '" + _titulo + "', " + _publicacion + ")");
-            sta.executeUpdate("INSERT INTO cancion (`titulo`, `duracion`, `letras`, `id`, `album`)"
-                    + "VALUES ('" + titulo + "' , '" + duracion + "', '" + letras + "' ," + id + "  , " + album + " )");
-            conn1.commit();
-        } catch (SQLException ex) {
-            System.out.println("ERROR:al hacer un Insert");
-            try {
-                if (conn1 != null) {
-                    conn1.rollback();
-                }
-            } catch (SQLException se2) {
-                se2.printStackTrace();
-            }
-            ex.printStackTrace();
-        }
-    }
+ 
 
     public String cargarDatosAlbum(int _id, String _dato) {
 //            int ide = Integer.parseInt(_id);

@@ -2,6 +2,8 @@
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -15,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -44,50 +47,47 @@ public class MiFrame extends javax.swing.JFrame {
     public MiFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
+        jComboBox3.addItemListener(itemListener);
 //          jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/jimmy.jpg")));    
         gesCon.GestorConexion();
-        
+
         gesCon.consulta_Statement("Select * from preso", jTable1, 1);
         jTable1.setRowHeight(25);
-        
-         jTable1.getColumnModel().getColumn( 0 ).setCellEditor(new MyTableCellEditor(gesCon,"codigo_preso"));//Columna Nombre
-        jTable1.getColumnModel().getColumn( 1 ).setCellEditor(new MyTableCellEditor(gesCon,"dni"));//Columna Apellido
-        jTable1.getColumnModel().getColumn( 2 ).setCellEditor(new MyTableCellEditor(gesCon,"nombre"));//Columna Edad
-      
+
         ////////// JDIALOGGGG ///////////
-        
-        jDialog1.setLocationRelativeTo(null);
-             
-        
-        
+        jDialogInsertarDelito.setLocationRelativeTo(null);
         ////////// JDIALOGGGG ///////////
-        
+
+        //listener para la tabla 1 de presos para que cuando se pulse click derecho en una las filas, un preso, 
+        //se carge un nuevo panel con los datos del preso 
         jTable1.addMouseListener(new MouseAdapter() {
-             public void mouseClicked(MouseEvent e) { 
-             
-            if ( SwingUtilities.isRightMouseButton(e)) {
-                Point p = e.getPoint();
+            public void mouseClicked(MouseEvent e) {
+
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    Point p = e.getPoint();
 //                JTable target = (JTable)e.getSource();
-                int row = jTable1.rowAtPoint(p);
-                String id = (String) jTable1.getModel().getValueAt(row,0);
-                gesCon.consulta_Statement("select * from preso_delito where codigo_preso = '" + id + "';", jTable2, 0);
-                 //Guardo la clave primaria del preso para despues saber de quien cargar los datos en el perfil
-                 preso = id;
-                 cambiarPanel(jPanel2);
-                 arrayPreso(preso);                
+                    int row = jTable1.rowAtPoint(p);
+                    String id = (String) jTable1.getModel().getValueAt(row, 0);
+                    gesCon.consulta_Statement("select * from preso_delito where codigo_preso = '" + id + "';", jTable2, 0);
+                    //Guardo la clave primaria del preso para despues saber de quien cargar los datos en el perfil
+                    preso = id;
+                    cambiarPanel(jPanel2);
+                    cargaPerfilPreso(preso);
+                }
             }
-  }
         });
-        
+
+        //listener para la tabla de los delitos dentro del perfil de preso para que cuando se seleccione uno 
+        //aparezna en el textbox de circunstancias estas, para una mejor vision de las mismas 
         jTable2.addMouseListener(new MouseAdapter() {
-             public void mouseClicked(MouseEvent e) { 
-             
-            JTable target = (JTable)e.getSource();
+            public void mouseClicked(MouseEvent e) {
+
+                JTable target = (JTable) e.getSource();
                 int row = target.getSelectedRow();
-                String circunstancias = (String)jTable2.getModel().getValueAt(row,2);
+                String circunstancias = (String) jTable2.getModel().getValueAt(row, 2);
                 jTextArea1.setText(circunstancias);
-    
-  }
+
+            }
         });
 
 //        Image scaledImage = originalImage.getScaledInstance(jLabel2.getWidth(),jLabel2.getHeight(),Image.SCALE_SMOOTH);
@@ -102,13 +102,13 @@ public class MiFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDialog1 = new javax.swing.JDialog();
+        jDialogInsertarDelito = new javax.swing.JDialog();
         jTextField13 = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
         jTextField14 = new javax.swing.JTextField();
-        jButton8 = new javax.swing.JButton();
+        jButtonCancelarAddDelito = new javax.swing.JButton();
         jComboBox3 = new javax.swing.JComboBox<>();
-        jButton9 = new javax.swing.JButton();
+        jButtonAceptarAddDelito = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         jTextArea4 = new javax.swing.JTextArea();
         jLabel20 = new javax.swing.JLabel();
@@ -116,45 +116,64 @@ public class MiFrame extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTextArea5 = new javax.swing.JTextArea();
+        jTextAreaDescNuevoDelito = new javax.swing.JTextArea();
+        jLabelErrorInsetarDelito = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jDialogBusquedaAvanzada = new javax.swing.JDialog();
+        jButton10 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
+        jTextField15 = new javax.swing.JTextField();
+        jTextField16 = new javax.swing.JTextField();
+        jTextField17 = new javax.swing.JTextField();
+        jTextField19 = new javax.swing.JTextField();
+        jTextField20 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
         jPanelContenedor = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButtonEliminarPreso = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField8 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jComboBoxConsultaPresos = new javax.swing.JComboBox<>();
+        jTextFieldConsultaPreso = new javax.swing.JTextField();
+        jButtonBuscarPreso = new javax.swing.JButton();
+        jLabel24 = new javax.swing.JLabel();
+        jButtonBusquedaAvanzada = new javax.swing.JButton();
+        jButtonNuevoPreso = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
+        jTextFieldDniPreso = new javax.swing.JTextField();
+        jTextFieldApellidoPreso = new javax.swing.JTextField();
+        jTextFieldNacionalidadPreso = new javax.swing.JTextField();
+        jTextFieldAlturaPreso = new javax.swing.JTextField();
+        jTextFieldBandaPreso = new javax.swing.JTextField();
+        jTextFieldPielPreso = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel11 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
+        jButtonAtrasPerfilPreso = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jTextField9 = new javax.swing.JTextField();
+        jTextFieldNacimientoPreso = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jTextField10 = new javax.swing.JTextField();
+        jTextFieldNombrePreso = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
+        jTextFieldCodigoPreso = new javax.swing.JTextField();
+        jLabel44 = new javax.swing.JLabel();
+        jLabelErrorPerfil = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jTextField11 = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
@@ -170,32 +189,54 @@ public class MiFrame extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTextArea3 = new javax.swing.JTextArea();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel30 = new javax.swing.JLabel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jTextField8 = new javax.swing.JTextField();
+        jTextField18 = new javax.swing.JTextField();
+        jTextField21 = new javax.swing.JTextField();
+        jTextField22 = new javax.swing.JTextField();
+        jTextField23 = new javax.swing.JTextField();
+        jTextField24 = new javax.swing.JTextField();
+        jTextField25 = new javax.swing.JTextField();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        jButtonAtrasInsertasPreso = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
+        jTextField26 = new javax.swing.JTextField();
+        jLabel40 = new javax.swing.JLabel();
+        jTextField27 = new javax.swing.JTextField();
+        jLabel41 = new javax.swing.JLabel();
+        jTextField28 = new javax.swing.JTextField();
+        jLabel42 = new javax.swing.JLabel();
+        jTextField29 = new javax.swing.JTextField();
+        jLabel43 = new javax.swing.JLabel();
 
-        jDialog1.setMaximumSize(new java.awt.Dimension(772, 413));
-        jDialog1.setMinimumSize(new java.awt.Dimension(772, 413));
+        jDialogInsertarDelito.setMinimumSize(new java.awt.Dimension(772, 413));
 
         jLabel19.setText("Codigo delito:");
 
         jTextField14.setEnabled(false);
 
-        jButton8.setText("Cancelar");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCancelarAddDelito.setText("Cancelar");
+        jButtonCancelarAddDelito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                jButtonCancelarAddDelitoActionPerformed(evt);
             }
         });
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox3ActionPerformed(evt);
-            }
-        });
 
-        jButton9.setText("Aceptar");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAceptarAddDelito.setText("Aceptar");
+        jButtonAceptarAddDelito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
+                jButtonAceptarAddDelitoActionPerformed(evt);
             }
         });
 
@@ -211,73 +252,189 @@ public class MiFrame extends javax.swing.JFrame {
 
         jLabel23.setText("Condena:");
 
-        jTextArea5.setColumns(20);
-        jTextArea5.setRows(5);
-        jScrollPane7.setViewportView(jTextArea5);
+        jTextAreaDescNuevoDelito.setColumns(20);
+        jTextAreaDescNuevoDelito.setRows(5);
+        jTextAreaDescNuevoDelito.setEnabled(false);
+        jScrollPane7.setViewportView(jTextAreaDescNuevoDelito);
 
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog1Layout.createSequentialGroup()
+        jLabelErrorInsetarDelito.setForeground(new java.awt.Color(255, 51, 51));
+
+        jLabel7.setText("Codigo:");
+
+        jTextField1.setEnabled(false);
+
+        javax.swing.GroupLayout jDialogInsertarDelitoLayout = new javax.swing.GroupLayout(jDialogInsertarDelito.getContentPane());
+        jDialogInsertarDelito.getContentPane().setLayout(jDialogInsertarDelitoLayout);
+        jDialogInsertarDelitoLayout.setHorizontalGroup(
+            jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogInsertarDelitoLayout.createSequentialGroup()
+                .addContainerGap(245, Short.MAX_VALUE)
+                .addComponent(jButtonAceptarAddDelito, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(66, 66, 66)
+                .addComponent(jButtonCancelarAddDelito, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(245, Short.MAX_VALUE))
+            .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
                 .addGap(57, 57, 57)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jDialog1Layout.createSequentialGroup()
+                .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
                         .addComponent(jLabel20)
                         .addGap(247, 247, 247)
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(23, 23, 23)
                         .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jDialog1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
+                        .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabelErrorInsetarDelito, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jTextField13)
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
+                            .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(70, 70, 70)
-                        .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jDialog1Layout.createSequentialGroup()
-                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(230, 230, 230)
-                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jDialog1Layout.createSequentialGroup()
-                        .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(70, 70, 70)
-                        .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
+                                .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
+                                        .addGap(55, 55, 55)
+                                        .addComponent(jLabel7))
+                                    .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
+                                        .addGap(46, 46, 46)
+                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog1Layout.createSequentialGroup()
-                .addContainerGap(245, Short.MAX_VALUE)
-                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66)
-                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(245, Short.MAX_VALUE))
         );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog1Layout.createSequentialGroup()
+        jDialogInsertarDelitoLayout.setVerticalGroup(
+            jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel20)
-                    .addComponent(jLabel19)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(13, 13, 13)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jDialog1Layout.createSequentialGroup()
-                        .addComponent(jLabel22)
-                        .addGap(14, 14, 14)
-                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(30, 30, 30)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel23))
-                .addGap(6, 6, 6)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton8)
-                    .addComponent(jButton9))
+                .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
+                        .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel20)
+                            .addComponent(jLabel19)
+                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(13, 13, 13)
+                        .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
+                                .addComponent(jLabel22)
+                                .addGap(14, 14, 14)
+                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
+                        .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(12, 12, 12)
+                .addComponent(jLabelErrorInsetarDelito, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonCancelarAddDelito)
+                    .addComponent(jButtonAceptarAddDelito))
                 .addGap(30, 30, 30))
+        );
+
+        jDialogBusquedaAvanzada.setMinimumSize(new java.awt.Dimension(365, 373));
+
+        jButton10.setText("Buscar");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
+        jButton11.setText("Cancelar");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
+        jLabel1.setText("Busqueda Avanzada");
+
+        jLabel25.setText("Nombre");
+
+        jLabel26.setText("Apellido");
+
+        jLabel27.setText("Nacionalidad");
+
+        jLabel28.setText("Color de piel");
+
+        jLabel29.setText("Banda");
+
+        javax.swing.GroupLayout jDialogBusquedaAvanzadaLayout = new javax.swing.GroupLayout(jDialogBusquedaAvanzada.getContentPane());
+        jDialogBusquedaAvanzada.getContentPane().setLayout(jDialogBusquedaAvanzadaLayout);
+        jDialogBusquedaAvanzadaLayout.setHorizontalGroup(
+            jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogBusquedaAvanzadaLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(90, 90, 90))
+            .addGroup(jDialogBusquedaAvanzadaLayout.createSequentialGroup()
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDialogBusquedaAvanzadaLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel28)
+                            .addComponent(jLabel29)
+                            .addComponent(jLabel26)
+                            .addComponent(jLabel25)
+                            .addComponent(jLabel27))
+                        .addGap(50, 50, 50)
+                        .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jDialogBusquedaAvanzadaLayout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(jButton11)
+                        .addGap(42, 42, 42)
+                        .addComponent(jButton10)))
+                .addContainerGap(53, Short.MAX_VALUE))
+        );
+        jDialogBusquedaAvanzadaLayout.setVerticalGroup(
+            jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogBusquedaAvanzadaLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addGap(33, 33, 33)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel25))
+                .addGap(18, 18, 18)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel26))
+                .addGap(18, 18, 18)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel28))
+                .addGap(18, 18, 18)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel29))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton10)
+                    .addComponent(jButton11))
+                .addGap(34, 34, 34))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -288,34 +445,48 @@ public class MiFrame extends javax.swing.JFrame {
         jPanel1.setMinimumSize(new java.awt.Dimension(980, 626));
         jPanel1.setPreferredSize(new java.awt.Dimension(980, 626));
 
-        jLabel1.setText("Presos:");
-
-        jButton3.setText("Guardar Cambios");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButtonEliminarPreso.setText("Eliminar Seleccionados");
+        jButtonEliminarPreso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Eliminar Seleccionados");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonEliminarPresoActionPerformed(evt);
             }
         });
 
         jScrollPane1.setViewportView(jTable1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos los presos", "Preso con DNI: ", "Preso con Código:", "Presos con Nombre:", "Presos con Apellido:", "Presos con Fecha de Nacimiento en:", "Presos con Nacionalidad:", "Presos con Color de piel:", "Presos con Altura:", "Presos de la Banda:", "Presos condenados antes de:", "Presos condenados después de:" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jComboBoxConsultaPresos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos los presos", "Preso con DNI: ", "Preso con Código:", "Presos con Nombre:", "Presos con Apellido:", "Presos con Fecha de Nacimiento en:", "Presos con Nacionalidad:", "Presos con Color de piel:", "Presos con Altura:", "Presos de la Banda:", "Presos condenados antes de:", "Presos condenados después de:" }));
+        jComboBoxConsultaPresos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                jComboBoxConsultaPresosActionPerformed(evt);
             }
         });
 
-        jTextField8.setEnabled(false);
+        jTextFieldConsultaPreso.setEnabled(false);
 
-        jButton1.setText("Buscar");
+        jButtonBuscarPreso.setText("Buscar");
+        jButtonBuscarPreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarPresoActionPerformed(evt);
+            }
+        });
+
+        jLabel24.setFont(new java.awt.Font("Lucida Sans Typewriter", 1, 36)); // NOI18N
+        jLabel24.setText("PRESOS");
+
+        jButtonBusquedaAvanzada.setText("Busqueda Avanzada");
+        jButtonBusquedaAvanzada.setToolTipText("");
+        jButtonBusquedaAvanzada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBusquedaAvanzadaActionPerformed(evt);
+            }
+        });
+
+        jButtonNuevoPreso.setText("Añadir Preso");
+        jButtonNuevoPreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNuevoPresoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -323,42 +494,43 @@ public class MiFrame extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(49, 49, 49)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 889, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jComboBoxConsultaPresos, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
+                        .addComponent(jTextFieldConsultaPreso, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonBuscarPreso)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 889, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButtonBusquedaAvanzada, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonNuevoPreso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonEliminarPreso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(42, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(37, 37, 37)
+                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
+                .addComponent(jButtonNuevoPreso)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
-                .addGap(32, 32, 32))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonEliminarPreso, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxConsultaPresos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldConsultaPreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonBuscarPreso)
+                    .addComponent(jButtonBusquedaAvanzada))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         jPanelContenedor.add(jPanel1, "card2");
@@ -375,48 +547,42 @@ public class MiFrame extends javax.swing.JFrame {
 
         jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 890, 210));
 
-        jTextField1.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, -1, -1));
+        jTextFieldDniPreso.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel2.add(jTextFieldDniPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, -1, -1));
 
-        jTextField2.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, -1, -1));
+        jTextFieldApellidoPreso.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel2.add(jTextFieldApellidoPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, -1, -1));
 
-        jTextField3.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 170, -1, -1));
+        jTextFieldNacionalidadPreso.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel2.add(jTextFieldNacionalidadPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, -1, -1));
 
-        jTextField4.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, -1, -1));
+        jTextFieldAlturaPreso.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel2.add(jTextFieldAlturaPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 200, -1, -1));
 
-        jTextField5.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 120, -1, -1));
+        jTextFieldBandaPreso.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel2.add(jTextFieldBandaPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 160, -1, -1));
 
-        jTextField6.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 170, 170, -1));
-
-        jTextField7.setMinimumSize(new java.awt.Dimension(170, 26));
-        jTextField7.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 70, -1, -1));
+        jTextFieldPielPreso.setMinimumSize(new java.awt.Dimension(170, 26));
+        jTextFieldPielPreso.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel2.add(jTextFieldPielPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 110, -1, -1));
 
         jLabel2.setText("Apellidos:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, -1, -1));
 
         jLabel4.setText("Altura:");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, -1, -1));
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 200, -1, -1));
 
         jLabel5.setText("Color de piel:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, -1, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, -1, -1));
 
         jLabel6.setText("Nacionalidad:");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 100, 20));
-
-        jLabel7.setText("DNI: ");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 170, -1, -1));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 270, 100, 20));
 
         jLabel8.setText("Banda:");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 130, -1, -1));
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 160, -1, -1));
 
-        jLabel9.setText("Nombre: ");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 70, -1, -1));
+        jLabel9.setText("DNI:");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, -1, -1));
 
         jLabel10.setText("DELITOS:");
         jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, -1, -1));
@@ -430,13 +596,13 @@ public class MiFrame extends javax.swing.JFrame {
         jLabel11.setText("Circunstancias delito seleccionado:");
         jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, -1, -1));
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/go_previous_black.png"))); // NOI18N
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAtrasPerfilPreso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/go_previous_black.png"))); // NOI18N
+        jButtonAtrasPerfilPreso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                jButtonAtrasPerfilPresoActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 50));
+        jPanel2.add(jButtonAtrasPerfilPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 50));
 
         jButton4.setText("Añadir delito");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -446,17 +612,27 @@ public class MiFrame extends javax.swing.JFrame {
         });
         jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 340, -1, -1));
 
-        jTextField9.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextField9, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, -1, -1));
+        jTextFieldNacimientoPreso.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel2.add(jTextFieldNacimientoPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 60, -1, -1));
 
-        jLabel12.setText("Altura:");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 270, -1, -1));
+        jLabel12.setText("Fecha Nacimiento:");
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 70, -1, -1));
 
-        jTextField10.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextField10, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 210, -1, -1));
+        jTextFieldNombrePreso.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel2.add(jTextFieldNombrePreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 170, -1, -1));
 
-        jLabel13.setText("Altura:");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 210, -1, -1));
+        jLabel13.setText("Nombre:");
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, -1, -1));
+
+        jTextFieldCodigoPreso.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel2.add(jTextFieldCodigoPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, -1, -1));
+
+        jLabel44.setText("Codigo Preso:");
+        jPanel2.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, -1, -1));
+
+        jLabelErrorPerfil.setForeground(new java.awt.Color(255, 0, 0));
+        jLabelErrorPerfil.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jPanel2.add(jLabelErrorPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 520, 20));
 
         jPanelContenedor.add(jPanel2, "card3");
 
@@ -566,70 +742,192 @@ public class MiFrame extends javax.swing.JFrame {
 
         jPanelContenedor.add(jPanel3, "card4");
 
+        jPanel4.setMaximumSize(new java.awt.Dimension(980, 626));
+        jPanel4.setMinimumSize(new java.awt.Dimension(980, 626));
+        jPanel4.setPreferredSize(new java.awt.Dimension(980, 626));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel30.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/anonimo.jpg"))); // NOI18N
+        jPanel4.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 60, 150, 170));
+
+        jTable3.setEnabled(false);
+        jScrollPane8.setViewportView(jTable3);
+
+        jPanel4.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 890, 210));
+
+        jTextField8.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel4.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, -1, 30));
+
+        jTextField18.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel4.add(jTextField18, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 170, -1, 30));
+
+        jTextField21.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel4.add(jTextField21, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, -1, 30));
+
+        jTextField22.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel4.add(jTextField22, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 270, -1, 30));
+
+        jTextField23.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel4.add(jTextField23, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 180, -1, -1));
+
+        jTextField24.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel4.add(jTextField24, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 230, 170, -1));
+
+        jTextField25.setMinimumSize(new java.awt.Dimension(170, 26));
+        jTextField25.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel4.add(jTextField25, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 130, -1, -1));
+
+        jLabel31.setText("Nombre:");
+        jPanel4.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, -1, 20));
+
+        jLabel32.setText("Fecha Nacimiento:");
+        jPanel4.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, -1, 20));
+
+        jLabel33.setText("Lugar Nacimiento:");
+        jPanel4.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 130, -1, -1));
+
+        jLabel34.setText("Apellido:");
+        jPanel4.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 60, 20));
+
+        jLabel35.setText("Color de piel: ");
+        jPanel4.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 230, -1, -1));
+
+        jLabel36.setText("Nacionalidad:");
+        jPanel4.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 180, -1, -1));
+
+        jLabel37.setText("DNI: ");
+        jPanel4.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, -1, 20));
+
+        jButtonAtrasInsertasPreso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/go_previous_black.png"))); // NOI18N
+        jButtonAtrasInsertasPreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAtrasInsertasPresoActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButtonAtrasInsertasPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 50));
+
+        jButton13.setText("Añadir Preso");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, -1, 30));
+
+        jTextField26.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel4.add(jTextField26, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 80, -1, -1));
+
+        jLabel40.setText("Altura:");
+        jPanel4.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 80, -1, -1));
+
+        jTextField27.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel4.add(jTextField27, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 280, -1, -1));
+
+        jLabel41.setText("Banda:");
+        jPanel4.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 280, -1, -1));
+
+        jTextField28.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel4.add(jTextField28, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, -1, -1));
+
+        jLabel42.setText("C:odigo Preso");
+        jPanel4.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, -1, -1));
+
+        jTextField29.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanel4.add(jTextField29, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 280, -1, -1));
+
+        jLabel43.setText("Foto URL:");
+        jPanel4.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 260, -1, -1));
+
+        jPanelContenedor.add(jPanel4, "card3");
+
         getContentPane().add(jPanelContenedor, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void actualizarComboDelitos(){
-         try {
-             Statement sta = gesCon.conn1.createStatement();
-             
-        ResultSet rs = sta.executeQuery("select codigo_delito from delito");
-        
-         System.out.println(pat);
-         jComboBox3.removeAllItems();
-         jComboBox3.addItem("");
-        while (rs.next()) {
-             pat = rs.getInt("codigo_delito");   
-             jComboBox3.addItem(String.valueOf(pat));       
+    //Carga en el combobox del jDialog de insertar delito los codigos de delitos que estan registrados en la bse de datos
+    private void actualizarComboDelitos() {
+        try {
+            pat = 0;
+            Statement sta = gesCon.conn1.createStatement();
 
+            ResultSet rs = sta.executeQuery("select codigo_delito from delito");
+
+            //Elimino el listener y se lo vuelvo a añadir despues de borrar el combobox, de lo contrario habia conflictos
+            jComboBox3.removeItemListener(itemListener);
+            jComboBox3.removeAllItems();
+            jComboBox3.addItemListener(itemListener);
+            jComboBox3.addItem("");
+            System.out.println(pat + "ERROR");
+            while (rs.next()) {
+                pat = rs.getInt("codigo_delito");
+                jComboBox3.addItem(String.valueOf(pat));
+
+            }
+            sta.close();
+            rs.close();
+            jComboBox3.addItem("Nuevo Delito");
+
+        } catch (Exception e) {
+            System.out.println("ERROORORORORRORORO");
         }
-         jComboBox3.addItem("Nuevo Delito");
-         
-
-    } catch (Exception e) {
-
-       
-    } 
     }
-   
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        gesCon.borrarDatos(jTable1, "preso");
-    }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        cambiarPanel(jPanel1);
-    }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-         String consulta  = (String) jComboBox1.getSelectedItem();
-        if(consulta.equals("Todos los presos"))
-               {
-                   if(jTextField8.isEnabled()){
-                       jTextField8.setText("");
-                       jTextField8.setEnabled(false);
-                   } 
+    //al dar al boton de eliminar preso aparece un joptionpane para confirmar la operacion
+    private void jButtonEliminarPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarPresoActionPerformed
+        int resp = JOptionPane.showConfirmDialog(null, "¿Desea eliminar los presos seleccionados?", "Alerta!", JOptionPane.YES_NO_OPTION);
+        if (resp == 0) {
+            System.out.println("Aceptar");
         } else {
-               if(!jTextField8.isEnabled()){
-                       jTextField8.setEnabled(true);
-                   } 
+            System.out.println("Cancel");
+            gesCon.borrarDatos(jTable1, "preso");
         }
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    }//GEN-LAST:event_jButtonEliminarPresoActionPerformed
+
+    private void jButtonAtrasPerfilPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtrasPerfilPresoActionPerformed
+        cambiarPanel(jPanel1);
+    }//GEN-LAST:event_jButtonAtrasPerfilPresoActionPerformed
+
+    //En funcion de si la consulta decsira un jtext para completarse se activa o no 
+    private void jComboBoxConsultaPresosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxConsultaPresosActionPerformed
+        String consulta = (String) jComboBoxConsultaPresos.getSelectedItem();
+        if (consulta.equals("Todos los presos")) {
+            if (jTextFieldConsultaPreso.isEnabled()) {
+                jTextFieldConsultaPreso.setText("");
+                jTextFieldConsultaPreso.setEnabled(false);
+            }
+        } else {
+            if (!jTextFieldConsultaPreso.isEnabled()) {
+                jTextFieldConsultaPreso.setEnabled(true);
+            }
+        }
+    }//GEN-LAST:event_jComboBoxConsultaPresosActionPerformed
+
+    //Item listener para el combobox que carga los delitos existentes
+    //por problemas lo he tenido que crear manual 
+    //para regular que los textboxt este habilitados o no en funcion si el usuario va a incluir un nuevo delito
+    ItemListener itemListener = new ItemListener() {
+        public void itemStateChanged(ItemEvent itemEvent) {
+            if (jComboBox3.getSelectedItem().toString().equals("Nuevo Delito")) {
+                jTextField14.setEnabled(true);
+                jTextField1.setEnabled(true);
+                jTextAreaDescNuevoDelito.setEnabled(true);
+
+            } else if (!jComboBox3.getSelectedItem().toString().equals("Nuevo Delito")) {
+                jTextField14.setEnabled(false);
+                jTextField1.setEnabled(false);
+                jTextAreaDescNuevoDelito.setEnabled(false);
+            }
+        }
+    };
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        actualizarComboDelitos();  
-        jDialog1.setVisible(true);        
-          jDialog1.setLocationRelativeTo(null);
-          
-//        jPanelContenedor.removeAll();
-//        jPanelContenedor.add(jPanel3);
-//        jPanelContenedor.repaint();
-//        jPanelContenedor.revalidate();
+        jDialogInsertarDelito.setVisible(true);
+        jDialogInsertarDelito.setLocationRelativeTo(null);
+        actualizarComboDelitos();
+
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -649,113 +947,286 @@ public class MiFrame extends javax.swing.JFrame {
         //        //utilizamos un metodo u otro
         //        Object selected = jComboBox1.getSelectedItem();
         //        if(!selected.toString().equals("Nuevo Album")){
-            //            gesCon.insertar(titulo,duracion,letras,id,album);
-            //        } else {
-            //            String _titulo = jTextField7.getText();
-            //            int _album = Integer.parseInt(jTextField6.getText());
-            //            int _publicacion = Integer.parseInt(jTextField5.getText());
-            //            gesCon.insertar_con_commit(titulo, duracion, letras, id, album, _album, _publicacion,_titulo);
-            //        }
+        //            gesCon.insertar(titulo,duracion,letras,id,album);
+        //        } else {
+        //            String _titulo = jTextField7.getText();
+        //            int _album = Integer.parseInt(jTextField6.getText());
+        //            int _publicacion = Integer.parseInt(jTextField5.getText());
+        //            gesCon.insertar_con_commit(titulo, duracion, letras, id, album, _album, _publicacion,_titulo);
+        //        }
         //        gesCon.cerrar_conexion();
         //        this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        jDialog1.setVisible(false);
-    }//GEN-LAST:event_jButton8ActionPerformed
+    private void jButtonCancelarAddDelitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarAddDelitoActionPerformed
+        jDialogInsertarDelito.setVisible(false);
+    }//GEN-LAST:event_jButtonCancelarAddDelitoActionPerformed
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        gesCon.insertarDelitoPreso(preso, jComboBox3.getSelectedItem().toString(), jTextArea4.getText(), jTextField13.getText());
-         gesCon.consulta_Statement("Select * from preso_delito where codigo_preso = '" + preso + "';",jTable2, 0);
-        jDialog1.setVisible(false);
-        
-        
-        
-    }//GEN-LAST:event_jButton9ActionPerformed
+    private void jButtonAceptarAddDelitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarAddDelitoActionPerformed
+        //Si seleccionamos un delito ya existente se introduce de manera normal
+        // si cremaos un nuevo delito se utiliza otro metodo para quitar el autocommit
+        //y hacer rollback si no se completa la insercion del nuevo delito y posteriormente el delito asociado a ese preso
+        String codDelito = jComboBox3.getSelectedItem().toString().trim();
 
-    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox3ActionPerformed
+        if (!codDelito.equals("") && !codDelito.equals("Nuevo Delito")) {
 
-    private void cambiarPanel(JPanel panel){
+            gesCon.insertarDelitoPreso(preso, codDelito, jTextArea4.getText(), jTextField13.getText());
+            gesCon.consulta_Statement("Select * from preso_delito where codigo_preso = '" + preso + "';", jTable2, 0);
+            jDialogInsertarDelito.setVisible(false);
+            // en la opciones en las que cerramos este jDialog quitamos el listener del combox para que luego
+            //Si volvemos a abrir esta pestaña y se cargar nuevos datos en el jcombobox no de errores
+//            jComboBox3.removeItemListener(itemListener);
+
+        } else if (codDelito.equals("Nuevo Delito")) {
+
+            codDelito = jTextField1.getText();
+            int resultadoInsercion = gesCon.insertarDelitoPresoNuevoDelito(preso, codDelito, jTextArea4.getText(), jTextField13.getText(), jTextAreaDescNuevoDelito.getText(), jTextField14.getText());
+
+            if (resultadoInsercion == 1) {
+
+                jLabelErrorInsetarDelito.setText("Se ha producido un error");
+            } else {
+                jDialogInsertarDelito.setVisible(false);
+//                jComboBox3.removeItemListener(itemListener);
+                //cargamos de nuevo los datos en la tabla para que se vea que se ha introducido el delito
+                gesCon.consulta_Statement("Select * from preso_delito where codigo_preso = '" + preso + "';", jTable2, 0);
+            }
+
+            //Si no se ha seleccionado un codigo de delito y se esta intentando añadir a un preso un delito lo idicamos por un jlabel
+        } else {
+            jLabelErrorInsetarDelito.setText("Seleccione un codigo de delito");
+        }
+
+
+    }//GEN-LAST:event_jButtonAceptarAddDelitoActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        //Cuando le damos a buscar en el jDialog de busqueda avanzada, se comprueba que jtext estan rellenos 
+        //y en funcion de esto se hace una consulta con estos campos
+        String consultaAvanzada = "";
+        //variable con la que comprobamos que se trata del primer dato a consultar o no,
+        //cada vez que entramos dentro de un if de las consultas se le añade 1 de este modoç
+        //excepto la primera vez sera diferente a 0 y se añadira el string adecuado
+        int checked = 0;
+        //El nombre va primero por lo que no necesita un if en caso de que se haya escogido segundo
+        if (!jTextField15.getText().trim().equals("")) {
+            consultaAvanzada = "nombre = '" + jTextField15.getText() + "'";
+            checked++;
+        }
+        //El resto de ifs necesitan otro if en su interior para que a la hora de formar el string de la consulta
+        //se forme correctamente con el and en caso de no ser el primer valor que se va a buscar
+        if (!jTextField16.getText().trim().equals("")) {
+            if (checked == 0) {
+                consultaAvanzada = "apellidos = '" + jTextField16.getText() + "'";
+            } else {
+                consultaAvanzada = consultaAvanzada + " and apellidos = '" + jTextField16.getText() + "'";
+            }
+            checked++;
+        }
+        if (!jTextField17.getText().trim().equals("")) {
+            if (checked == 0) {
+                consultaAvanzada = "nacionalidad = '" + jTextField17.getText() + "'";
+            } else {
+                consultaAvanzada = consultaAvanzada + " and nacionalidad = '" + jTextField17.getText() + "'";
+            }
+            checked++;
+        }
+        if (!jTextField19.getText().trim().equals("")) {
+            if (checked == 0) {
+                consultaAvanzada = "color_piel = '" + jTextField19.getText() + "'";
+            } else {
+                consultaAvanzada = consultaAvanzada + " and color_piel = '" + jTextField19.getText() + "'";
+            }
+            checked++;
+        }
+        if (!jTextField20.getText().trim().equals("")) {
+            if (checked == 0) {
+                consultaAvanzada = "banda = '" + jTextField19.getText() + "'";
+            } else {
+                consultaAvanzada = consultaAvanzada + " and banda = '" + jTextField19.getText() + "'";
+            }
+            checked++;
+        }
+
+        System.out.println(consultaAvanzada);
+        gesCon.consulta_Statement("Select * from preso where " + consultaAvanzada + " ;", jTable1, 0);
+
+        jDialogBusquedaAvanzada.setVisible(false);
+        reseteTextBusquedaAvanzada();
+
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButtonBusquedaAvanzadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBusquedaAvanzadaActionPerformed
+        jDialogBusquedaAvanzada.setLocationRelativeTo(null);
+        jDialogBusquedaAvanzada.setVisible(true);
+
+    }//GEN-LAST:event_jButtonBusquedaAvanzadaActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        jDialogBusquedaAvanzada.setVisible(false);
+        reseteTextBusquedaAvanzada();
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jButtonBuscarPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarPresoActionPerformed
+        String consulta = (String) jComboBoxConsultaPresos.getSelectedItem();
+        //switch para las cosnultas de los presos, en funcion de el valor seleccionado en el ComboBox 
+        //se asocia a una consulta
+        switch (consulta.trim()) {
+            case "Todos los presos":
+                consulta = "Select * from preso;";
+                break;
+            case "Preso con DNI:":
+                consulta = "Select * from preso where dni = '" + jTextFieldConsultaPreso.getText() + "';";
+                break;
+            case "Preso con Código:":
+                consulta = "Select * from preso where codigo_preso = '" + jTextFieldConsultaPreso.getText() + "';";
+                break;
+            case "Presos con Nombre:":
+                consulta = "Select * from preso where nombre = '" + jTextFieldConsultaPreso.getText() + "';";
+                break;
+            case "Presos con Apellido:":
+                consulta = "Select * from preso where apellidos = '" + jTextFieldConsultaPreso.getText() + "';";
+                break;
+            case "Presos con Fecha de Nacimiento en:":
+                consulta = "Select * from preso where fecha_nacimiento = '" + jTextFieldConsultaPreso.getText() + "';";
+                break;
+            case "Presos con Nacionalidad:":
+                consulta = "Select * from preso where nacionalidad = '" + jTextFieldConsultaPreso.getText() + "';";
+                break;
+            case "Presos con Color de piel:":
+                consulta = "Select * from preso where color_piel = '" + jTextFieldConsultaPreso.getText() + "';";
+                break;
+            case "Presos con Altura:":
+                consulta = "Select * from preso where estatura = " + jTextFieldConsultaPreso.getText() + ";";
+                break;
+            case "Presos de la Banda:":
+                consulta = "Select * from preso where banda = '" + jTextFieldConsultaPreso.getText() + "';";
+                break;
+
+        }
+        gesCon.consulta_Statement(consulta, jTable1, 1);
+    }//GEN-LAST:event_jButtonBuscarPresoActionPerformed
+
+    private void jButtonAtrasInsertasPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtrasInsertasPresoActionPerformed
+        cambiarPanel(jPanel1);
+    }//GEN-LAST:event_jButtonAtrasInsertasPresoActionPerformed
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        String _codigo_preso = jTextField28.getText().trim();
+        String _dni = jTextField8.getText().trim();
+        String _nombre = jTextField18.getText().trim();
+        String _apellidos = jTextField21.getText().trim();
+        String _fecha_nacimiento = jTextField22.getText().trim();
+        String _lugar_nacimiento = jTextField25.getText().trim();
+        String _nacionalidad = jTextField23.getText().trim();
+        String _estatura = jTextField26.getText().trim();
+        String _color_piel = jTextField24.getText().trim();
+        String _banda = jTextField27.getText().trim();
+        String _fotoPreso = jTextField29.getText().trim();
+        
+        gesCon.insertarPreso(_codigo_preso, _dni, _nombre, _apellidos, _fecha_nacimiento, _lugar_nacimiento, 
+                _nacionalidad, _estatura, _color_piel, _banda, _fotoPreso);
+        cargaPerfilPreso(_codigo_preso);
+        cambiarPanel(jPanel2);
+        //actualizamos la variable preso para que se pueden realizar los insert a continuacion si se le quieren añadir delitos
+        //al preso que se acaba de crear 
+        preso = _codigo_preso;
+    }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void jButtonNuevoPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevoPresoActionPerformed
+        cambiarPanel(jPanel4);
+    }//GEN-LAST:event_jButtonNuevoPresoActionPerformed
+
+    private void reseteTextBusquedaAvanzada() {
+        jTextField15.setText("");
+        jTextField16.setText("");
+        jTextField17.setText("");
+        jTextField19.setText("");
+        jTextField20.setText("");
+    }
+
+    private void cambiarPanel(JPanel panel) {
         jPanelContenedor.removeAll();
         jPanelContenedor.add(panel);
         jPanelContenedor.repaint();
         jPanelContenedor.revalidate();
-        
-}
-    
 
-    
-      public void arrayPreso(String preso) {
-            List datosPreso  = new ArrayList();
+    }
+
+    //Metodo para actualizar todos los datos del perfil de un preso cuando hacemos clikc derecho sobre este en la primera tabla
+    public void cargaPerfilPreso(String preso) {
+        List datosPreso = new ArrayList();
 
         try {
-          
 
             //Para ejecutar la consulta
             Statement s = gesCon.conn1.createStatement();
             //Ejecutamos la consulta que escribimos en la caja de texto
             //y los datos lo almacenamos en un ResultSet
-            ResultSet rs = s.executeQuery("Select * from preso where codigo_preso = '" + preso + "';");  
+            ResultSet rs = s.executeQuery("Select * from preso where codigo_preso = '" + preso + "';");
             //Obteniendo la informacion de las columnas que estan siendo consultadas
             ResultSetMetaData rsMd = rs.getMetaData();
             //La cantidad de columnas que tiene la consulta
             int cantidadColumnas = rsMd.getColumnCount();
-        
-            
-            while(rs.next()){
-            for(int j = 0; j < cantidadColumnas; j++) {
-            datosPreso.add(rs.getString(1+j));
-        }
+
+            //guardamos los datos del preso en array para luego colocarlos en los jtextfields
+            while (rs.next()) {
+                for (int j = 0; j < cantidadColumnas; j++) {
+                    datosPreso.add(rs.getString(1 + j));
+                }
             }
             rs.close();
             s.close();
-        
-           } catch (Exception ex) {
-            ex.printStackTrace();
-           }
-        
-        jTextField1.setText(datosPreso.get(0).toString());
-        jTextField2.setText(datosPreso.get(1).toString());
-        jTextField3.setText(datosPreso.get(2).toString());
-        jTextField4.setText(datosPreso.get(3).toString());
-        jTextField5.setText(datosPreso.get(4).toString());
-        jTextField6.setText(datosPreso.get(5).toString());
-        jTextField7.setText(datosPreso.get(6).toString());
-         actualizarFoto(datosPreso.get(9).toString());
-        gesCon.consulta_Statement("Select * from preso_delito where codigo_preso = '" + preso + "';",jTable2, 0);
-        
 
-       
-        
-              
-}
+            jTextFieldCodigoPreso.setText(datosPreso.get(0).toString());
+            jTextFieldDniPreso.setText(datosPreso.get(1).toString());
+            jTextFieldNombrePreso.setText(datosPreso.get(2).toString());
+            jTextFieldApellidoPreso.setText(datosPreso.get(3).toString());
+            jTextFieldNacimientoPreso.setText(datosPreso.get(4).toString());
+            jTextFieldNacionalidadPreso.setText(datosPreso.get(6).toString());
+            jTextFieldAlturaPreso.setText(datosPreso.get(7).toString());
+            jTextFieldPielPreso.setText(datosPreso.get(8).toString());
+            jTextFieldBandaPreso.setText(datosPreso.get(9).toString());
+
+            actualizarFoto(datosPreso.get(10).toString());
+
+            gesCon.consulta_Statement("Select * from preso_delito where codigo_preso = '" + preso + "';", jTable2, 0);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
     private void actualizarFoto(String foto) {
         //metodo que ejecutamos cuando cargamos un perfil de un preso, primero intentamos cargar su foto con la url 
         //que tenemos en la base de datos, si nos da error Null Pointer Exception (significa que la foto no existe)
         //utilizaremos una generic que guardamos en la cartpeta y que en principio nunca dará error
-        
-        //Da igual que tamaño de imagen se proporcione con este metodo se escala al jlabel de destino
-        try{
-        ImageIcon img = new javax.swing.ImageIcon(getClass().getResource(foto));
-        Image myimage = img.getImage();
-        Image newimage = myimage.getScaledInstance(jLabel3.getWidth(), jLabel3.getHeight(), Image.SCALE_SMOOTH);
-        ImageIcon definitivo = new ImageIcon(newimage);
-        jLabel3.setIcon(definitivo);
 
-        } catch(NullPointerException e) {
-            
+        //Da igual que tamaño de imagen se proporcione con este metodo se escala al jlabel de destino
+        //si la voto es un string vacio pueder ser que en la base de datos no se tenga la foto y al cojer el dato se guarda como tal
+        //si ocurre ese usamos la predefinida
+        if (foto.trim().equals("")) {
+            foto = "/imagenes/anonimo.jpg";
+        }
+
+        try {
+            ImageIcon img = new javax.swing.ImageIcon(getClass().getResource(foto));
+            Image myimage = img.getImage();
+            Image newimage = myimage.getScaledInstance(jLabel3.getWidth(), jLabel3.getHeight(), Image.SCALE_SMOOTH);
+            ImageIcon definitivo = new ImageIcon(newimage);
+            jLabel3.setIcon(definitivo);
+
+        } catch (NullPointerException e) {
+
             ImageIcon img = new javax.swing.ImageIcon(getClass().getResource("/imagenes/anonimo.jpg"));
-        Image myimage = img.getImage();
-        Image newimage = myimage.getScaledInstance(jLabel3.getWidth(), jLabel3.getHeight(), Image.SCALE_SMOOTH);
-        ImageIcon definitivo = new ImageIcon(newimage);
-        jLabel3.setIcon(definitivo);
+            Image myimage = img.getImage();
+            Image newimage = myimage.getScaledInstance(jLabel3.getWidth(), jLabel3.getHeight(), Image.SCALE_SMOOTH);
+            ImageIcon definitivo = new ImageIcon(newimage);
+            jLabel3.setIcon(definitivo);
 
         }
     }
-
-   
 
     /**
      * @param args the command line arguments
@@ -793,19 +1264,25 @@ public class MiFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton jButtonAceptarAddDelito;
+    private javax.swing.JButton jButtonAtrasInsertasPreso;
+    private javax.swing.JButton jButtonAtrasPerfilPreso;
+    private javax.swing.JButton jButtonBuscarPreso;
+    private javax.swing.JButton jButtonBusquedaAvanzada;
+    private javax.swing.JButton jButtonCancelarAddDelito;
+    private javax.swing.JButton jButtonEliminarPreso;
+    private javax.swing.JButton jButtonNuevoPreso;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JDialog jDialog1;
+    private javax.swing.JComboBox<String> jComboBoxConsultaPresos;
+    private javax.swing.JDialog jDialogBusquedaAvanzada;
+    private javax.swing.JDialog jDialogInsertarDelito;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -822,16 +1299,38 @@ public class MiFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelErrorInsetarDelito;
+    private javax.swing.JLabel jLabelErrorPerfil;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanelContenedor;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -840,26 +1339,45 @@ public class MiFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextArea jTextArea4;
-    private javax.swing.JTextArea jTextArea5;
+    private javax.swing.JTextArea jTextAreaDescNuevoDelito;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextField15;
+    private javax.swing.JTextField jTextField16;
+    private javax.swing.JTextField jTextField17;
+    private javax.swing.JTextField jTextField18;
+    private javax.swing.JTextField jTextField19;
+    private javax.swing.JTextField jTextField20;
+    private javax.swing.JTextField jTextField21;
+    private javax.swing.JTextField jTextField22;
+    private javax.swing.JTextField jTextField23;
+    private javax.swing.JTextField jTextField24;
+    private javax.swing.JTextField jTextField25;
+    private javax.swing.JTextField jTextField26;
+    private javax.swing.JTextField jTextField27;
+    private javax.swing.JTextField jTextField28;
+    private javax.swing.JTextField jTextField29;
     private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JTextField jTextFieldAlturaPreso;
+    private javax.swing.JTextField jTextFieldApellidoPreso;
+    private javax.swing.JTextField jTextFieldBandaPreso;
+    private javax.swing.JTextField jTextFieldCodigoPreso;
+    private javax.swing.JTextField jTextFieldConsultaPreso;
+    private javax.swing.JTextField jTextFieldDniPreso;
+    private javax.swing.JTextField jTextFieldNacimientoPreso;
+    private javax.swing.JTextField jTextFieldNacionalidadPreso;
+    private javax.swing.JTextField jTextFieldNombrePreso;
+    private javax.swing.JTextField jTextFieldPielPreso;
     // End of variables declaration//GEN-END:variables
 }
