@@ -48,9 +48,9 @@ public class conexiones {
         }
 
     }
-    
-     public void insertarPreso(String _codigo_preso, String _dni, String _nombre, String _apellidos, String _fecha_nacimiento, 
-             String _lugar_nacimiento, String _nacionalidad, String _estatura, String _color_piel, String _banda, String _fotoPreso,String telefonos) {
+
+    public void insertarPreso(String _codigo_preso, String _dni, String _nombre, String _apellidos, String _fecha_nacimiento,
+            String _lugar_nacimiento, String _nacionalidad, String _estatura, String _color_piel, String _banda, String _fotoPreso, String telefonos) {
         try {
             // Crea un statement
             Statement sta = conn1.createStatement();
@@ -59,11 +59,11 @@ public class conexiones {
 //                    + "('" + _codigo_preso + "' , '" + _dni + "', '"+ _nombre + "', '"+ _apellidos + "', '"+ _fecha_nacimiento 
 //                    + "', '"+ _lugar_nacimiento + "', '"+ _nacionalidad + "', '"+ _estatura + "', '"+ _color_piel + "', '"+ _banda + "', '"+ _fotoPreso + "' )");
 //            Cierra el statement
-            sta.executeUpdate("Insert INTO preso VALUES  ('"+_codigo_preso+"', '"+_dni+"', '"+_nombre+"', '"+_apellidos+"', to_date('"+_fecha_nacimiento+"','DD-MM-YYYY'),"
-         + " '"+_lugar_nacimiento+"', '"+_nacionalidad+"', "+_estatura+", '"+_color_piel+"', '"+_banda+"' , tabla_telefonos("+telefonos+") , '/imagenes/paccino.jpeg')");
-            System.out.println("Insert INTO preso VALUES  ('"+_codigo_preso+"', '"+_dni+"', '"+_nombre+"', '"+_apellidos+"', to_date('"+_fecha_nacimiento+"','DD-MM-YYYY'),"
-         + " '"+_lugar_nacimiento+"', '"+_nacionalidad+"', "+_estatura+", '"+_color_piel+"', '"+_banda+"' , tabla_telefonos("+telefonos+") , '/imagenes/paccino.jpeg')");
-          
+            sta.executeUpdate("Insert INTO preso VALUES  ('" + _codigo_preso + "', '" + _dni + "', '" + _nombre + "', '" + _apellidos + "', to_date('" + _fecha_nacimiento + "','DD-MM-YYYY'),"
+                    + " '" + _lugar_nacimiento + "', '" + _nacionalidad + "', " + _estatura + ", '" + _color_piel + "', '" + _banda + "' , tabla_telefonos(" + telefonos + ") , '/imagenes/paccino.jpeg')");
+            System.out.println("Insert INTO preso VALUES  ('" + _codigo_preso + "', '" + _dni + "', '" + _nombre + "', '" + _apellidos + "', to_date('" + _fecha_nacimiento + "','DD-MM-YYYY'),"
+                    + " '" + _lugar_nacimiento + "', '" + _nacionalidad + "', " + _estatura + ", '" + _color_piel + "', '" + _banda + "' , tabla_telefonos(" + telefonos + ") , '/imagenes/paccino.jpeg')");
+
             sta.close();
         } catch (SQLException ex) {
             System.out.println("ERROR:al hacer un Insert");
@@ -76,8 +76,7 @@ public class conexiones {
             // Crea un statement
             Statement sta = conn1.createStatement();
             // Ejecuta la inserciÃ³n
-            sta.executeUpdate("INSERT INTO preso_delito (`codigo_preso`, `codigo_delito`, `circustancias`, `ubicacion`)"
-                    + "VALUES ('" + _id + "' , " + codigoDelito + ", '"+ circunstancias + "', '"+ ubicacion + "' );");
+            sta.executeUpdate("INSERT INTO preso_delito VALUES ((SELECT REF(pres) FROM preso pres where pres.codigo_preso ='"+_id+"'),(SELECT REF(del) FROM delito del where del.codigo_delito = "+codigoDelito+"),'"+circunstancias+"', '"+ubicacion+"')");
             // Cierra el statement
             sta.close();
         } catch (SQLException ex) {
@@ -85,99 +84,97 @@ public class conexiones {
             ex.printStackTrace();
         }
     }
-    
+
     public int insertarDelitoPresoNuevoDelito(String _id, String codigoDelito, String circunstancias, String ubicacion, String descripcion, String condena) {
-         try {
+        try {
             conn1.setAutoCommit(false);
             Statement sta = conn1.createStatement();
-            sta.executeUpdate("INSERT INTO `delito` (`codigo_delito`, `descripcion`, `condena`)"
-                    + "VALUES ( " + codigoDelito + ", '" + descripcion + "', " + condena + ")");
-            sta.executeUpdate("INSERT INTO preso_delito (`codigo_preso`, `codigo_delito`, `circustancias`, `ubicacion`)"
-                    + "VALUES ('" + _id + "' , " + codigoDelito + ", '"+ circunstancias + "', '"+ ubicacion + "' )");
+            sta.executeUpdate("INSERT INTO delito VALUES ("+codigoDelito+", '"+descripcion+"', "+condena+")");
+            sta.executeUpdate("INSERT INTO preso_delito VALUES ((SELECT REF(pres) FROM preso pres where pres.codigo_preso ='"+_id+"'),(SELECT REF(del) FROM delito del where del.codigo_delito = "+codigoDelito+"),'"+circunstancias+"', '"+ubicacion+"')");
             conn1.commit();
-             conn1.setAutoCommit(true);
+            conn1.setAutoCommit(true);
             return 0;
-        } catch (SQLException ex) {           
+        } catch (SQLException ex) {
             System.out.println("ERROR:al hacer un Insert");
             try {
                 if (conn1 != null) {
                     conn1.rollback();
-                }               
+                }
             } catch (SQLException se2) {
                 se2.printStackTrace();
-                
-            }           
-            ex.printStackTrace();           
+
+            }
+            ex.printStackTrace();
             return 1;
         }
     }
-    
+
     //Para modificar los datos de un preso quitando en el autocommit para que en el caso de que se produzca un error a medias 
     //se realice un rollback, o se modifican todos o ninguno
-       public int modificarDatosPreso(String _codigo_preso, String _dni, String _nombre, String _apellidos, String _fecha_nacimiento, String _nacionalidad,
-               String _estatura, String _color_piel, String _banda) {
-         try {
-             System.out.println(_fecha_nacimiento + "ATENTO");
+    public int modificarDatosPreso(String _codigo_preso, String _dni, String _nombre, String _apellidos, String _fecha_nacimiento, String _nacionalidad,
+            String _estatura, String _color_piel, String _banda) {
+        try {
+            System.out.println(_fecha_nacimiento + "ATENTO");
             conn1.setAutoCommit(false);
             Statement sta = conn1.createStatement();
-            sta.executeUpdate("UPDATE preso SET dni = '"+ _dni +"' WHERE preso.codigo_preso = '"+ _codigo_preso +"'");
-            sta.executeUpdate("UPDATE preso SET nombre = '"+ _nombre +"' WHERE preso.codigo_preso = '"+ _codigo_preso +"'");
-            sta.executeUpdate("UPDATE preso SET apellidos = '"+ _apellidos +"' WHERE preso.codigo_preso = '"+ _codigo_preso +"'");
-            sta.executeUpdate("UPDATE preso SET fecha_nacimiento = '"+ _fecha_nacimiento +"' WHERE preso.codigo_preso = '"+ _codigo_preso +"'");
-            sta.executeUpdate("UPDATE preso SET nacionalidad = '"+ _nacionalidad +"' WHERE preso.codigo_preso = '"+ _codigo_preso +"'");
-            sta.executeUpdate("UPDATE preso SET estatura = "+ _estatura +" WHERE preso.codigo_preso = '"+ _codigo_preso +"'");
-            sta.executeUpdate("UPDATE preso SET color_piel = '"+ _color_piel +"' WHERE preso.codigo_preso = '"+ _codigo_preso +"'");
-            sta.executeUpdate("UPDATE preso SET banda = '"+ _banda +"' WHERE preso.codigo_preso = '"+ _codigo_preso +"'");
-            
+            sta.executeUpdate("UPDATE preso SET dni = '" + _dni + "' WHERE preso.codigo_preso = '" + _codigo_preso + "'");
+            sta.executeUpdate("UPDATE preso SET nombre = '" + _nombre + "' WHERE preso.codigo_preso = '" + _codigo_preso + "'");
+            sta.executeUpdate("UPDATE preso SET apellidos = '" + _apellidos + "' WHERE preso.codigo_preso = '" + _codigo_preso + "'");
+            sta.executeUpdate("UPDATE preso SET fecha_nacimiento = '" + _fecha_nacimiento + "' WHERE preso.codigo_preso = '" + _codigo_preso + "'");
+            sta.executeUpdate("UPDATE preso SET nacionalidad = '" + _nacionalidad + "' WHERE preso.codigo_preso = '" + _codigo_preso + "'");
+            sta.executeUpdate("UPDATE preso SET estatura = " + _estatura + " WHERE preso.codigo_preso = '" + _codigo_preso + "'");
+            sta.executeUpdate("UPDATE preso SET color_piel = '" + _color_piel + "' WHERE preso.codigo_preso = '" + _codigo_preso + "'");
+            sta.executeUpdate("UPDATE preso SET banda = '" + _banda + "' WHERE preso.codigo_preso = '" + _codigo_preso + "'");
+
             conn1.commit();
-             conn1.setAutoCommit(true);
+            conn1.setAutoCommit(true);
             return 0;
-        } catch (SQLException ex) {           
+        } catch (SQLException ex) {
             System.out.println("ERROR:al hacer un Insert");
             try {
                 if (conn1 != null) {
                     conn1.rollback();
-                }               
+                }
             } catch (SQLException se2) {
                 se2.printStackTrace();
-                
-            }           
-            ex.printStackTrace();           
+
+            }
+            ex.printStackTrace();
             return 1;
         }
     }
-    
+
     public void modificarTelefono(String _preso, String _telMovil, String _telAbogado, String _telFamiliar,
-            boolean _nuevoMovil , boolean _nuevoAbogado , boolean _nuevoFamiliar, boolean _actuaMovil , boolean _actuaAbogado , boolean _actuaFamiliar) {
+            boolean _nuevoMovil, boolean _nuevoAbogado, boolean _nuevoFamiliar, boolean _actuaMovil, boolean _actuaAbogado, boolean _actuaFamiliar) {
         try {
             // Crea un statement
             Statement sta = conn1.createStatement();
             //Con las variables de actua comprobamos si el campo estaba vacio cuando se cargaron los telefonos y cuando se dio a modificar también
             // lo que significaria que no estaba creado el tipo de ese telefono para ese preso y que no queremos realizar ninguna accion
-            if(_actuaMovil){
-            //los booleons 'nuevo' nos indican si cuando se cargaron los telefonos ese tenia contendio lo que significaria que ya existe y que 
-            //que lo vamos a cambiar de lo contrario no existia y tendremos que realizar unas insercion 
-            if(!_nuevoMovil){
-                sta.executeUpdate("update table(select telefono from preso where codigo_preso = '"+_preso+"' )set Num_telefono = '"+_telMovil+"' where tipo = 'Movil'");
-            } else {
-                 sta.executeUpdate("insert into table ( select telefono from preso where  codigo_preso = '"+_preso+"' )  values ( 'Movil' , '"+_telMovil+"' )");
+            if (_actuaMovil) {
+                //los booleons 'nuevo' nos indican si cuando se cargaron los telefonos ese tenia contendio lo que significaria que ya existe y que 
+                //que lo vamos a cambiar de lo contrario no existia y tendremos que realizar unas insercion 
+                if (!_nuevoMovil) {
+                    sta.executeUpdate("update table(select telefono from preso where codigo_preso = '" + _preso + "' )set Num_telefono = '" + _telMovil + "' where tipo = 'Movil'");
+                } else {
+                    sta.executeUpdate("insert into table ( select telefono from preso where  codigo_preso = '" + _preso + "' )  values ( 'Movil' , '" + _telMovil + "' )");
+                }
             }
+            if (_actuaAbogado) {
+                if (!_nuevoAbogado) {
+                    sta.executeUpdate("update table(select telefono from preso where codigo_preso = '" + _preso + "' )set Num_telefono = '" + _telAbogado + "' where tipo = 'Abogado'");
+                } else {
+                    sta.executeUpdate("insert into table ( select telefono from preso where  codigo_preso = '" + _preso + "' )  values ( 'Abogado' , '" + _telAbogado + "' )");
+                }
             }
-            if(_actuaAbogado){
-            if(!_nuevoAbogado){
-                sta.executeUpdate("update table(select telefono from preso where codigo_preso = '"+_preso+"' )set Num_telefono = '"+_telAbogado+"' where tipo = 'Abogado'");
-            } else {
-                 sta.executeUpdate("insert into table ( select telefono from preso where  codigo_preso = '"+_preso+"' )  values ( 'Abogado' , '"+_telAbogado+"' )");
+            if (_actuaFamiliar) {
+                if (!_nuevoFamiliar) {
+                    sta.executeUpdate("update table(select telefono from preso where codigo_preso = '" + _preso + "' )set Num_telefono = '" + _telFamiliar + "' where tipo = 'Familiar'");
+                } else {
+                    sta.executeUpdate("insert into table ( select telefono from preso where  codigo_preso = '" + _preso + "' )  values ( 'Familiar' , '" + _telFamiliar + "' )");
+                }
             }
-            }
-            if(_actuaFamiliar){
-            if(!_nuevoFamiliar){
-                sta.executeUpdate("update table(select telefono from preso where codigo_preso = '"+_preso+"' )set Num_telefono = '"+_telFamiliar+"' where tipo = 'Familiar'");
-            } else {
-                 sta.executeUpdate("insert into table ( select telefono from preso where  codigo_preso = '"+_preso+"' )  values ( 'Familiar' , '"+_telFamiliar+"' )");
-            }
-            }
-            
+
             // Cierra el statement
             sta.close();
         } catch (SQLException ex) {
@@ -185,51 +182,48 @@ public class conexiones {
             ex.printStackTrace();
         }
     }
-    
-    public String cargarTelefonoPreso(String preso, String tipoTelefono){
+
+    public String cargarTelefonoPreso(String preso, String tipoTelefono) {
         try {
 
             String telefonoReturn = "";
-          //Para ejecutar la consulta
+            //Para ejecutar la consulta
             Statement s = conn1.createStatement();
             //Ejecutamos la consulta que escribimos en la caja de texto
             //y los datos lo almacenamos en un ResultSet
             ResultSet rs = s.executeQuery("select t.Num_telefono from preso p, table(p.telefono)"
-                    + " t where p.codigo_preso = '"+preso+"' and t.tipo ='"+tipoTelefono+"'");
+                    + " t where p.codigo_preso = '" + preso + "' and t.tipo ='" + tipoTelefono + "'");
             //Obteniendo la informacion de las columnas que estan siendo consultadas
             ResultSetMetaData rsMd = rs.getMetaData();
             //La cantidad de columnas que tiene la consulta
             int cantidadColumnas = rsMd.getColumnCount();
-         
+
             while (rs.next()) {
-                    telefonoReturn = (rs.getString(1));               
+                telefonoReturn = (rs.getString(1));
             }
             rs.close();
             s.close();
-            
+
             return telefonoReturn;
-            } catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return "ERROR";
         }
     }
-       
-    public boolean update(String valores, String id)
-    {
-        boolean res = false;        
+
+    public boolean update(String valores, String id) {
+        boolean res = false;
         String q = " UPDATE preso SET " + valores + " WHERE codigo_preso= " + id;
         try {
             PreparedStatement pstm = conn1.prepareStatement(q);
             pstm.execute();
             pstm.close();
-            res=true;
-         }catch(SQLException e){            
+            res = true;
+        } catch (SQLException e) {
             System.out.println(e);
         }
         return res;
     }
-
- 
 
     public String cargarDatosAlbum(int _id, String _dato) {
 //            int ide = Integer.parseInt(_id);
@@ -260,7 +254,7 @@ public class conexiones {
     //le pasamos un int columnas eliminadas para en vez de tener que poner la consulta de todos los campos que queremos si queremos 
     //quitarle la ultima columna como en el caso de a la hora de mostrar los presos que no queremos mostrar la url de su foto
     //se lo indicamos y asi se elimina mas facilmente
-    public void consulta_Statement(String pregunta, JTable tabla,int columnasEliminadas) {
+    public void consulta_Statement(String pregunta, JTable tabla, int columnasEliminadas) {
 
         try {
             //Para establecer el modelo al JTable
@@ -288,7 +282,7 @@ public class conexiones {
 
                 Object[] fila = new Object[cantidadColumnas];
                 for (int i = 0; i < cantidadColumnas; i++) {
-                    fila[i] = rs.getObject(i+1);
+                    fila[i] = rs.getObject(i + 1);
                 }
 
                 modelo.addRow(fila);
@@ -330,12 +324,13 @@ public class conexiones {
                 sta.close();
                 conn1.setAutoCommit(true);
             } catch (Exception e) {
-                 try{
-                    if( conn1!=null)
-                         conn1.rollback();
-                    }catch(SQLException se2){
-                         se2.printStackTrace();
+                try {
+                    if (conn1 != null) {
+                        conn1.rollback();
                     }
+                } catch (SQLException se2) {
+                    se2.printStackTrace();
+                }
             }
 
         } else {
