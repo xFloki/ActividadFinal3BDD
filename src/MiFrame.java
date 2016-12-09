@@ -1,4 +1,5 @@
 
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.Point;
@@ -9,9 +10,12 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +44,9 @@ public class MiFrame extends javax.swing.JFrame {
     Statement sta;
     String preso;
     int pat;
+    //cremaos unas Variables para comprobar los telefonos que tiene el preso para a la hora de modificar la nested table en funcion
+        //de si ya lo tiene se tendra que modificar o añadir uno nuevo 
+        boolean nuevoTelMovil = true;  boolean nuevoTelAbogado = true;  boolean nuevoTelFamiliar = true;
 
     /**
      * Creates new form MiFrame
@@ -51,7 +58,7 @@ public class MiFrame extends javax.swing.JFrame {
 //          jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/jimmy.jpg")));    
         gesCon.GestorConexion();
 
-        gesCon.consulta_Statement("Select * from preso", jTable1, 1);
+        gesCon.consulta_Statement("select * from preso", jTable1, 2);
         jTable1.setRowHeight(25);
 
         ////////// JDIALOGGGG ///////////
@@ -68,11 +75,13 @@ public class MiFrame extends javax.swing.JFrame {
 //                JTable target = (JTable)e.getSource();
                     int row = jTable1.rowAtPoint(p);
                     String id = (String) jTable1.getModel().getValueAt(row, 0);
-                    gesCon.consulta_Statement("select * from preso_delito where codigo_preso = '" + id + "';", jTable2, 0);
+                    
                     //Guardo la clave primaria del preso para despues saber de quien cargar los datos en el perfil
                     preso = id;
-                    cambiarPanel(jPanel2);
+                    cambiarPanel(jPanelPerfilPreso);
                     cargaPerfilPreso(preso);
+                    //resteo las circunstancias epor si tiene las de algun preos anterior
+                     jTextArea1.setText("");
                 }
             }
         });
@@ -102,6 +111,20 @@ public class MiFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialogBusquedaAvanzada = new javax.swing.JDialog();
+        jButton10 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
+        jTextField15 = new javax.swing.JTextField();
+        jTextField16 = new javax.swing.JTextField();
+        jTextField17 = new javax.swing.JTextField();
+        jTextField19 = new javax.swing.JTextField();
+        jTextField20 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
         jDialogInsertarDelito = new javax.swing.JDialog();
         jTextField13 = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
@@ -120,22 +143,18 @@ public class MiFrame extends javax.swing.JFrame {
         jLabelErrorInsetarDelito = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jDialogBusquedaAvanzada = new javax.swing.JDialog();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jTextField15 = new javax.swing.JTextField();
-        jTextField16 = new javax.swing.JTextField();
-        jTextField17 = new javax.swing.JTextField();
-        jTextField19 = new javax.swing.JTextField();
-        jTextField20 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        jLabel27 = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
-        jLabel29 = new javax.swing.JLabel();
+        jDialogModificarTelefono = new javax.swing.JDialog();
+        jLabel39 = new javax.swing.JLabel();
+        jLabel45 = new javax.swing.JLabel();
+        jLabel46 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jPanelContenedor = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        jPanelInicio = new javax.swing.JPanel();
         jButtonEliminarPreso = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -145,36 +164,40 @@ public class MiFrame extends javax.swing.JFrame {
         jLabel24 = new javax.swing.JLabel();
         jButtonBusquedaAvanzada = new javax.swing.JButton();
         jButtonNuevoPreso = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        jPanelPerfilPreso = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jTextFieldDniPreso = new javax.swing.JTextField();
-        jTextFieldApellidoPreso = new javax.swing.JTextField();
-        jTextFieldNacionalidadPreso = new javax.swing.JTextField();
-        jTextFieldAlturaPreso = new javax.swing.JTextField();
+        jTextFieldDniPresoPerfil = new javax.swing.JTextField();
+        jTextFieldApellidoPresoPerfil = new javax.swing.JTextField();
+        jTextFieldNacionalidadPresoPerfil = new javax.swing.JTextField();
+        jTextFieldAlturaPresoPerfil = new javax.swing.JTextField();
         jTextFieldBandaPreso = new javax.swing.JTextField();
-        jTextFieldPielPreso = new javax.swing.JTextField();
+        jTextFieldPielPresoPerfil = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel11 = new javax.swing.JLabel();
         jButtonAtrasPerfilPreso = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jTextFieldNacimientoPreso = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jTextFieldNombrePreso = new javax.swing.JTextField();
+        jTextFieldNombrePresoPerfil = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        jTextFieldCodigoPreso = new javax.swing.JTextField();
+        jTextFieldCodigoPresoPerfil = new javax.swing.JTextField();
         jLabel44 = new javax.swing.JLabel();
         jLabelErrorPerfil = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        jLabel38 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jButtonModificarTelPreso = new javax.swing.JButton();
+        jPanelAddDelito = new javax.swing.JPanel();
         jTextField11 = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         jTextField12 = new javax.swing.JTextField();
@@ -189,7 +212,7 @@ public class MiFrame extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTextArea3 = new javax.swing.JTextArea();
-        jPanel4 = new javax.swing.JPanel();
+        jPanelAddPreso = new javax.swing.JPanel();
         jLabel30 = new javax.swing.JLabel();
         jScrollPane8 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
@@ -208,7 +231,7 @@ public class MiFrame extends javax.swing.JFrame {
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
         jButtonAtrasInsertasPreso = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
+        jButtonAddPreso = new javax.swing.JButton();
         jTextField26 = new javax.swing.JTextField();
         jLabel40 = new javax.swing.JLabel();
         jTextField27 = new javax.swing.JTextField();
@@ -217,6 +240,103 @@ public class MiFrame extends javax.swing.JFrame {
         jLabel42 = new javax.swing.JLabel();
         jTextField29 = new javax.swing.JTextField();
         jLabel43 = new javax.swing.JLabel();
+        jTextField30 = new javax.swing.JTextField();
+        jTextField31 = new javax.swing.JTextField();
+        jLabel47 = new javax.swing.JLabel();
+        jLabel48 = new javax.swing.JLabel();
+        jTextField32 = new javax.swing.JTextField();
+        jLabel49 = new javax.swing.JLabel();
+
+        jDialogBusquedaAvanzada.setMinimumSize(new java.awt.Dimension(365, 373));
+
+        jButton10.setText("Buscar");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
+        jButton11.setText("Cancelar");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
+        jLabel1.setText("Busqueda Avanzada");
+
+        jLabel25.setText("Nombre");
+
+        jLabel26.setText("Apellido");
+
+        jLabel27.setText("Nacionalidad");
+
+        jLabel28.setText("Color de piel");
+
+        jLabel29.setText("Banda");
+
+        javax.swing.GroupLayout jDialogBusquedaAvanzadaLayout = new javax.swing.GroupLayout(jDialogBusquedaAvanzada.getContentPane());
+        jDialogBusquedaAvanzada.getContentPane().setLayout(jDialogBusquedaAvanzadaLayout);
+        jDialogBusquedaAvanzadaLayout.setHorizontalGroup(
+            jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogBusquedaAvanzadaLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel28)
+                    .addComponent(jLabel29)
+                    .addComponent(jLabel26)
+                    .addComponent(jLabel25)
+                    .addComponent(jLabel27))
+                .addGap(50, 50, 50)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(53, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogBusquedaAvanzadaLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogBusquedaAvanzadaLayout.createSequentialGroup()
+                        .addComponent(jButton11)
+                        .addGap(28, 28, 28)
+                        .addComponent(jButton10)))
+                .addGap(90, 90, 90))
+        );
+        jDialogBusquedaAvanzadaLayout.setVerticalGroup(
+            jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogBusquedaAvanzadaLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addGap(33, 33, 33)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel25))
+                .addGap(18, 18, 18)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel26))
+                .addGap(18, 18, 18)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel28))
+                .addGap(18, 18, 18)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel29))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton10)
+                    .addComponent(jButton11))
+                .addGap(32, 32, 32))
+        );
 
         jDialogInsertarDelito.setMinimumSize(new java.awt.Dimension(772, 413));
 
@@ -268,11 +388,11 @@ public class MiFrame extends javax.swing.JFrame {
         jDialogInsertarDelitoLayout.setHorizontalGroup(
             jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogInsertarDelitoLayout.createSequentialGroup()
-                .addContainerGap(245, Short.MAX_VALUE)
-                .addComponent(jButtonAceptarAddDelito, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonCancelarAddDelito, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(245, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addComponent(jButtonAceptarAddDelito, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
                 .addGap(57, 57, 57)
                 .addGroup(jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,7 +424,7 @@ public class MiFrame extends javax.swing.JFrame {
                                     .addGroup(jDialogInsertarDelitoLayout.createSequentialGroup()
                                         .addGap(46, 46, 46)
                                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         jDialogInsertarDelitoLayout.setVerticalGroup(
             jDialogInsertarDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -344,106 +464,48 @@ public class MiFrame extends javax.swing.JFrame {
                 .addGap(30, 30, 30))
         );
 
-        jDialogBusquedaAvanzada.setMinimumSize(new java.awt.Dimension(365, 373));
+        jDialogModificarTelefono.setMaximumSize(new java.awt.Dimension(358, 291));
+        jDialogModificarTelefono.setMinimumSize(new java.awt.Dimension(358, 291));
+        jDialogModificarTelefono.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton10.setText("Buscar");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        jLabel39.setText("Movil:");
+        jDialogModificarTelefono.getContentPane().add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(76, 48, -1, -1));
+
+        jLabel45.setText("Abogado:");
+        jDialogModificarTelefono.getContentPane().add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 94, -1, -1));
+
+        jLabel46.setText("Familiar Contacto:");
+        jDialogModificarTelefono.getContentPane().add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 142, -1, -1));
+        jDialogModificarTelefono.getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 45, 163, -1));
+        jDialogModificarTelefono.getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 91, 163, -1));
+        jDialogModificarTelefono.getContentPane().add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 139, 163, -1));
+
+        jButton2.setText("Cancelar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                jButton2ActionPerformed(evt);
             }
         });
+        jDialogModificarTelefono.getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, -1, -1));
 
-        jButton11.setText("Cancelar");
-        jButton11.addActionListener(new java.awt.event.ActionListener() {
+        jButton6.setText("Modificar Telefonos");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton11ActionPerformed(evt);
+                jButton6ActionPerformed(evt);
             }
         });
+        jDialogModificarTelefono.getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 190, -1, -1));
 
-        jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
-        jLabel1.setText("Busqueda Avanzada");
-
-        jLabel25.setText("Nombre");
-
-        jLabel26.setText("Apellido");
-
-        jLabel27.setText("Nacionalidad");
-
-        jLabel28.setText("Color de piel");
-
-        jLabel29.setText("Banda");
-
-        javax.swing.GroupLayout jDialogBusquedaAvanzadaLayout = new javax.swing.GroupLayout(jDialogBusquedaAvanzada.getContentPane());
-        jDialogBusquedaAvanzada.getContentPane().setLayout(jDialogBusquedaAvanzadaLayout);
-        jDialogBusquedaAvanzadaLayout.setHorizontalGroup(
-            jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogBusquedaAvanzadaLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(90, 90, 90))
-            .addGroup(jDialogBusquedaAvanzadaLayout.createSequentialGroup()
-                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jDialogBusquedaAvanzadaLayout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel28)
-                            .addComponent(jLabel29)
-                            .addComponent(jLabel26)
-                            .addComponent(jLabel25)
-                            .addComponent(jLabel27))
-                        .addGap(50, 50, 50)
-                        .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jDialogBusquedaAvanzadaLayout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addComponent(jButton11)
-                        .addGap(42, 42, 42)
-                        .addComponent(jButton10)))
-                .addContainerGap(53, Short.MAX_VALUE))
-        );
-        jDialogBusquedaAvanzadaLayout.setVerticalGroup(
-            jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogBusquedaAvanzadaLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addGap(33, 33, 33)
-                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel25))
-                .addGap(18, 18, 18)
-                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel26))
-                .addGap(18, 18, 18)
-                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel27))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel28))
-                .addGap(18, 18, 18)
-                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel29))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addGroup(jDialogBusquedaAvanzadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton10)
-                    .addComponent(jButton11))
-                .addGap(34, 34, 34))
-        );
+        jButton3.setText("jButton3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanelContenedor.setMaximumSize(new java.awt.Dimension(980, 626));
         jPanelContenedor.setLayout(new java.awt.CardLayout());
 
-        jPanel1.setMaximumSize(new java.awt.Dimension(980, 626));
-        jPanel1.setMinimumSize(new java.awt.Dimension(980, 626));
-        jPanel1.setPreferredSize(new java.awt.Dimension(980, 626));
+        jPanelInicio.setMaximumSize(new java.awt.Dimension(980, 626));
+        jPanelInicio.setMinimumSize(new java.awt.Dimension(980, 626));
+        jPanelInicio.setPreferredSize(new java.awt.Dimension(980, 626));
 
         jButtonEliminarPreso.setText("Eliminar Seleccionados");
         jButtonEliminarPreso.addActionListener(new java.awt.event.ActionListener() {
@@ -488,15 +550,15 @@ public class MiFrame extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelInicioLayout = new javax.swing.GroupLayout(jPanelInicio);
+        jPanelInicio.setLayout(jPanelInicioLayout);
+        jPanelInicioLayout.setHorizontalGroup(
+            jPanelInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelInicioLayout.createSequentialGroup()
                 .addGap(49, 49, 49)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanelInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 889, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInicioLayout.createSequentialGroup()
                         .addComponent(jComboBoxConsultaPresos, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldConsultaPreso, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -505,24 +567,24 @@ public class MiFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonBusquedaAvanzada, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanelInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButtonNuevoPreso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonEliminarPreso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(42, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(46, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInicioLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanelInicioLayout.setVerticalGroup(
+            jPanelInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelInicioLayout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19)
                 .addComponent(jButtonNuevoPreso)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonEliminarPreso, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxConsultaPresos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldConsultaPreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -530,71 +592,69 @@ public class MiFrame extends javax.swing.JFrame {
                     .addComponent(jButtonBusquedaAvanzada))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
-        jPanelContenedor.add(jPanel1, "card2");
+        jPanelContenedor.add(jPanelInicio, "card2");
 
-        jPanel2.setMaximumSize(new java.awt.Dimension(980, 626));
-        jPanel2.setMinimumSize(new java.awt.Dimension(980, 626));
-        jPanel2.setPreferredSize(new java.awt.Dimension(980, 626));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanelPerfilPreso.setMaximumSize(new java.awt.Dimension(980, 626));
+        jPanelPerfilPreso.setMinimumSize(new java.awt.Dimension(980, 626));
+        jPanelPerfilPreso.setPreferredSize(new java.awt.Dimension(980, 626));
+        jPanelPerfilPreso.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/anonimo.jpg"))); // NOI18N
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 60, 150, 170));
+        jPanelPerfilPreso.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 60, 150, 170));
 
         jScrollPane2.setViewportView(jTable2);
 
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 890, 210));
+        jPanelPerfilPreso.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 890, 210));
 
-        jTextFieldDniPreso.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextFieldDniPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, -1, -1));
+        jTextFieldDniPresoPerfil.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanelPerfilPreso.add(jTextFieldDniPresoPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, -1, -1));
 
-        jTextFieldApellidoPreso.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextFieldApellidoPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, -1, -1));
+        jTextFieldApellidoPresoPerfil.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanelPerfilPreso.add(jTextFieldApellidoPresoPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, -1, -1));
 
-        jTextFieldNacionalidadPreso.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextFieldNacionalidadPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, -1, -1));
+        jTextFieldNacionalidadPresoPerfil.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanelPerfilPreso.add(jTextFieldNacionalidadPresoPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, -1, -1));
 
-        jTextFieldAlturaPreso.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextFieldAlturaPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 200, -1, -1));
+        jTextFieldAlturaPresoPerfil.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanelPerfilPreso.add(jTextFieldAlturaPresoPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 210, -1, -1));
 
         jTextFieldBandaPreso.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextFieldBandaPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 160, -1, -1));
+        jPanelPerfilPreso.add(jTextFieldBandaPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 160, -1, -1));
 
-        jTextFieldPielPreso.setMinimumSize(new java.awt.Dimension(170, 26));
-        jTextFieldPielPreso.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextFieldPielPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 110, -1, -1));
+        jTextFieldPielPresoPerfil.setMinimumSize(new java.awt.Dimension(170, 26));
+        jTextFieldPielPresoPerfil.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanelPerfilPreso.add(jTextFieldPielPresoPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 110, -1, -1));
 
         jLabel2.setText("Apellidos:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, -1, -1));
+        jPanelPerfilPreso.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, -1, -1));
 
         jLabel4.setText("Altura:");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 200, -1, -1));
+        jPanelPerfilPreso.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 210, -1, -1));
 
         jLabel5.setText("Color de piel:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, -1, -1));
+        jPanelPerfilPreso.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 110, -1, -1));
 
         jLabel6.setText("Nacionalidad:");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 270, 100, 20));
+        jPanelPerfilPreso.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 270, 100, 20));
 
         jLabel8.setText("Banda:");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 160, -1, -1));
+        jPanelPerfilPreso.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 160, -1, -1));
 
         jLabel9.setText("DNI:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, -1, -1));
+        jPanelPerfilPreso.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, -1, -1));
 
-        jLabel10.setText("DELITOS:");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, -1, -1));
-
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane3.setViewportView(jTextArea1);
 
-        jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 274, 530, 90));
+        jPanelPerfilPreso.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 274, 530, 90));
 
         jLabel11.setText("Circunstancias delito seleccionado:");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, -1, -1));
+        jPanelPerfilPreso.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, -1, -1));
 
         jButtonAtrasPerfilPreso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/go_previous_black.png"))); // NOI18N
         jButtonAtrasPerfilPreso.addActionListener(new java.awt.event.ActionListener() {
@@ -602,7 +662,7 @@ public class MiFrame extends javax.swing.JFrame {
                 jButtonAtrasPerfilPresoActionPerformed(evt);
             }
         });
-        jPanel2.add(jButtonAtrasPerfilPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 50));
+        jPanelPerfilPreso.add(jButtonAtrasPerfilPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 50));
 
         jButton4.setText("Añadir delito");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -610,35 +670,58 @@ public class MiFrame extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 340, -1, -1));
-
-        jTextFieldNacimientoPreso.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextFieldNacimientoPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 60, -1, -1));
+        jPanelPerfilPreso.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, -1, -1));
 
         jLabel12.setText("Fecha Nacimiento:");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 70, -1, -1));
+        jPanelPerfilPreso.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 60, -1, -1));
 
-        jTextFieldNombrePreso.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextFieldNombrePreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 170, -1, -1));
+        jTextFieldNombrePresoPerfil.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanelPerfilPreso.add(jTextFieldNombrePresoPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 170, -1, -1));
 
         jLabel13.setText("Nombre:");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, -1, -1));
+        jPanelPerfilPreso.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, -1, -1));
 
-        jTextFieldCodigoPreso.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel2.add(jTextFieldCodigoPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, -1, -1));
+        jTextFieldCodigoPresoPerfil.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanelPerfilPreso.add(jTextFieldCodigoPresoPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, -1, -1));
 
         jLabel44.setText("Codigo Preso:");
-        jPanel2.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, -1, -1));
+        jPanelPerfilPreso.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, -1, -1));
 
         jLabelErrorPerfil.setForeground(new java.awt.Color(255, 0, 0));
         jLabelErrorPerfil.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jPanel2.add(jLabelErrorPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 520, 20));
+        jPanelPerfilPreso.add(jLabelErrorPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 520, 20));
 
-        jPanelContenedor.add(jPanel2, "card3");
+        jLabel38.setText("Telefono");
+        jPanelPerfilPreso.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 320, -1, -1));
 
-        jPanel3.setMaximumSize(new java.awt.Dimension(777, 468));
-        jPanel3.setMinimumSize(new java.awt.Dimension(777, 468));
-        jPanel3.setPreferredSize(new java.awt.Dimension(777, 468));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanelPerfilPreso.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 320, 140, -1));
+
+        jButton1.setText("Modificar Datos");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanelPerfilPreso.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 240, 150, -1));
+
+        jLabel10.setForeground(new java.awt.Color(255, 0, 0));
+        jPanelPerfilPreso.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 14, 460, 20));
+        jPanelPerfilPreso.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 60, 170, 26));
+
+        jButtonModificarTelPreso.setText("jButton8");
+        jButtonModificarTelPreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModificarTelPresoActionPerformed(evt);
+            }
+        });
+        jPanelPerfilPreso.add(jButtonModificarTelPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 320, 30, -1));
+
+        jPanelContenedor.add(jPanelPerfilPreso, "card3");
+
+        jPanelAddDelito.setMaximumSize(new java.awt.Dimension(777, 468));
+        jPanelAddDelito.setMinimumSize(new java.awt.Dimension(777, 468));
+        jPanelAddDelito.setPreferredSize(new java.awt.Dimension(777, 468));
 
         jLabel14.setText("Codigo delito:");
 
@@ -676,127 +759,127 @@ public class MiFrame extends javax.swing.JFrame {
         jTextArea3.setRows(5);
         jScrollPane5.setViewportView(jTextArea3);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelAddDelitoLayout = new javax.swing.GroupLayout(jPanelAddDelito);
+        jPanelAddDelito.setLayout(jPanelAddDelitoLayout);
+        jPanelAddDelitoLayout.setHorizontalGroup(
+            jPanelAddDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelAddDelitoLayout.createSequentialGroup()
                 .addGap(42, 42, 42)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanelAddDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelAddDelitoLayout.createSequentialGroup()
                         .addComponent(jLabel15)
                         .addGap(247, 247, 247)
                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(23, 23, 23)
                         .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPanelAddDelitoLayout.createSequentialGroup()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(70, 70, 70)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelAddDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPanelAddDelitoLayout.createSequentialGroup()
                         .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(230, 230, 230)
                         .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPanelAddDelitoLayout.createSequentialGroup()
                         .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(70, 70, 70)
                         .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPanelAddDelitoLayout.createSequentialGroup()
                         .addGap(230, 230, 230)
                         .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(62, 62, 62)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(268, Short.MAX_VALUE))
+                .addContainerGap(272, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        jPanelAddDelitoLayout.setVerticalGroup(
+            jPanelAddDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelAddDelitoLayout.createSequentialGroup()
                 .addGap(56, 56, 56)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelAddDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel15)
                     .addComponent(jLabel14)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(13, 13, 13)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelAddDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPanelAddDelitoLayout.createSequentialGroup()
                         .addComponent(jLabel17)
                         .addGap(14, 14, 14)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelAddDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18))
                 .addGap(6, 6, 6)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelAddDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(64, 64, 64)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelAddDelitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton7)
                     .addComponent(jButton5))
-                .addContainerGap(211, Short.MAX_VALUE))
+                .addContainerGap(246, Short.MAX_VALUE))
         );
 
-        jPanelContenedor.add(jPanel3, "card4");
+        jPanelContenedor.add(jPanelAddDelito, "card4");
 
-        jPanel4.setMaximumSize(new java.awt.Dimension(980, 626));
-        jPanel4.setMinimumSize(new java.awt.Dimension(980, 626));
-        jPanel4.setPreferredSize(new java.awt.Dimension(980, 626));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanelAddPreso.setMaximumSize(new java.awt.Dimension(980, 626));
+        jPanelAddPreso.setMinimumSize(new java.awt.Dimension(980, 626));
+        jPanelAddPreso.setPreferredSize(new java.awt.Dimension(980, 626));
+        jPanelAddPreso.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel30.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/anonimo.jpg"))); // NOI18N
-        jPanel4.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 60, 150, 170));
+        jPanelAddPreso.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 60, 150, 170));
 
         jTable3.setEnabled(false);
         jScrollPane8.setViewportView(jTable3);
 
-        jPanel4.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 890, 210));
+        jPanelAddPreso.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 890, 210));
 
         jTextField8.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel4.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, -1, 30));
+        jPanelAddPreso.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 90, -1, 30));
 
         jTextField18.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel4.add(jTextField18, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 170, -1, 30));
+        jPanelAddPreso.add(jTextField18, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, -1, 30));
 
         jTextField21.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel4.add(jTextField21, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, -1, 30));
+        jPanelAddPreso.add(jTextField21, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 190, -1, 30));
 
         jTextField22.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel4.add(jTextField22, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 270, -1, 30));
+        jPanelAddPreso.add(jTextField22, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 240, -1, 30));
 
         jTextField23.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel4.add(jTextField23, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 180, -1, -1));
+        jPanelAddPreso.add(jTextField23, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 100, -1, -1));
 
         jTextField24.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel4.add(jTextField24, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 230, 170, -1));
+        jPanelAddPreso.add(jTextField24, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 150, 170, -1));
 
         jTextField25.setMinimumSize(new java.awt.Dimension(170, 26));
         jTextField25.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel4.add(jTextField25, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 130, -1, -1));
+        jPanelAddPreso.add(jTextField25, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 50, -1, -1));
 
         jLabel31.setText("Nombre:");
-        jPanel4.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, -1, 20));
+        jPanelAddPreso.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 140, -1, 20));
 
         jLabel32.setText("Fecha Nacimiento:");
-        jPanel4.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, -1, 20));
+        jPanelAddPreso.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, -1, 20));
 
         jLabel33.setText("Lugar Nacimiento:");
-        jPanel4.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 130, -1, -1));
+        jPanelAddPreso.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, -1, -1));
 
         jLabel34.setText("Apellido:");
-        jPanel4.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 60, 20));
+        jPanelAddPreso.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 190, 60, 20));
 
         jLabel35.setText("Color de piel: ");
-        jPanel4.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 230, -1, -1));
+        jPanelAddPreso.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 150, -1, -1));
 
         jLabel36.setText("Nacionalidad:");
-        jPanel4.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 180, -1, -1));
+        jPanelAddPreso.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 100, -1, -1));
 
         jLabel37.setText("DNI: ");
-        jPanel4.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, -1, 20));
+        jPanelAddPreso.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, -1, 20));
 
         jButtonAtrasInsertasPreso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/go_previous_black.png"))); // NOI18N
         jButtonAtrasInsertasPreso.addActionListener(new java.awt.event.ActionListener() {
@@ -804,41 +887,59 @@ public class MiFrame extends javax.swing.JFrame {
                 jButtonAtrasInsertasPresoActionPerformed(evt);
             }
         });
-        jPanel4.add(jButtonAtrasInsertasPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 50));
+        jPanelAddPreso.add(jButtonAtrasInsertasPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 50));
 
-        jButton13.setText("Añadir Preso");
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAddPreso.setText("Añadir Preso");
+        jButtonAddPreso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
+                jButtonAddPresoActionPerformed(evt);
             }
         });
-        jPanel4.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, -1, 30));
+        jPanelAddPreso.add(jButtonAddPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 340, -1, 30));
 
         jTextField26.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel4.add(jTextField26, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 80, -1, -1));
+        jPanelAddPreso.add(jTextField26, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 290, -1, -1));
 
         jLabel40.setText("Altura:");
-        jPanel4.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 80, -1, -1));
+        jPanelAddPreso.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 290, -1, -1));
 
         jTextField27.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel4.add(jTextField27, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 280, -1, -1));
+        jPanelAddPreso.add(jTextField27, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 200, -1, -1));
 
         jLabel41.setText("Banda:");
-        jPanel4.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 280, -1, -1));
+        jPanelAddPreso.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 200, -1, -1));
 
         jTextField28.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel4.add(jTextField28, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, -1, -1));
+        jPanelAddPreso.add(jTextField28, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, -1, -1));
 
-        jLabel42.setText("C:odigo Preso");
-        jPanel4.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, -1, -1));
+        jLabel42.setText("Codigo Preso");
+        jPanelAddPreso.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, -1, -1));
 
         jTextField29.setPreferredSize(new java.awt.Dimension(170, 26));
-        jPanel4.add(jTextField29, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 280, -1, -1));
+        jPanelAddPreso.add(jTextField29, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 280, -1, -1));
 
         jLabel43.setText("Foto URL:");
-        jPanel4.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 260, -1, -1));
+        jPanelAddPreso.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 260, -1, -1));
 
-        jPanelContenedor.add(jPanel4, "card3");
+        jTextField30.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanelAddPreso.add(jTextField30, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 240, -1, -1));
+
+        jTextField31.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanelAddPreso.add(jTextField31, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 290, 170, -1));
+
+        jLabel47.setText("Telefono Abogado:");
+        jPanelAddPreso.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 290, -1, -1));
+
+        jLabel48.setText("Telefono Movil:");
+        jPanelAddPreso.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 240, -1, -1));
+
+        jTextField32.setPreferredSize(new java.awt.Dimension(170, 26));
+        jPanelAddPreso.add(jTextField32, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 340, -1, -1));
+
+        jLabel49.setText("Telefono Familiar:");
+        jPanelAddPreso.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 340, -1, -1));
+
+        jPanelContenedor.add(jPanelAddPreso, "card3");
 
         getContentPane().add(jPanelContenedor, java.awt.BorderLayout.CENTER);
 
@@ -876,17 +977,15 @@ public class MiFrame extends javax.swing.JFrame {
     //al dar al boton de eliminar preso aparece un joptionpane para confirmar la operacion
     private void jButtonEliminarPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarPresoActionPerformed
         int resp = JOptionPane.showConfirmDialog(null, "¿Desea eliminar los presos seleccionados?", "Alerta!", JOptionPane.YES_NO_OPTION);
-        if (resp == 0) {
-            System.out.println("Aceptar");
-        } else {
-            System.out.println("Cancel");
-            gesCon.borrarDatos(jTable1, "preso");
+        if (resp == 0) {     
+            gesCon.borrarDatos(jTable1, "preso");    
+            System.out.println("MiFrame.jButtonEliminarPresoActionPerformed()");
         }
 
     }//GEN-LAST:event_jButtonEliminarPresoActionPerformed
 
     private void jButtonAtrasPerfilPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtrasPerfilPresoActionPerformed
-        cambiarPanel(jPanel1);
+       cambiarPanel(jPanelInicio);
     }//GEN-LAST:event_jButtonAtrasPerfilPresoActionPerformed
 
     //En funcion de si la consulta decsira un jtext para completarse se activa o no 
@@ -923,8 +1022,8 @@ public class MiFrame extends javax.swing.JFrame {
     };
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        jDialogInsertarDelito.setVisible(true);
         jDialogInsertarDelito.setLocationRelativeTo(null);
+        jDialogInsertarDelito.setVisible(true);    
         actualizarComboDelitos();
 
 
@@ -1041,16 +1140,15 @@ public class MiFrame extends javax.swing.JFrame {
         }
         if (!jTextField20.getText().trim().equals("")) {
             if (checked == 0) {
-                consultaAvanzada = "banda = '" + jTextField19.getText() + "'";
+                consultaAvanzada = "banda = '" + jTextField20.getText() + "'";
             } else {
-                consultaAvanzada = consultaAvanzada + " and banda = '" + jTextField19.getText() + "'";
+                consultaAvanzada = consultaAvanzada + " and banda = '" + jTextField20.getText() + "'";
             }
             checked++;
         }
 
         System.out.println(consultaAvanzada);
-        gesCon.consulta_Statement("Select * from preso where " + consultaAvanzada + " ;", jTable1, 0);
-
+        gesCon.consulta_Statement("Select * from preso where " + consultaAvanzada  , jTable1, 0);
         jDialogBusquedaAvanzada.setVisible(false);
         reseteTextBusquedaAvanzada();
 
@@ -1073,45 +1171,49 @@ public class MiFrame extends javax.swing.JFrame {
         //se asocia a una consulta
         switch (consulta.trim()) {
             case "Todos los presos":
-                consulta = "Select * from preso;";
+                consulta = "Select * from preso";
                 break;
             case "Preso con DNI:":
-                consulta = "Select * from preso where dni = '" + jTextFieldConsultaPreso.getText() + "';";
+                consulta = "Select * from preso where dni = '" + jTextFieldConsultaPreso.getText() + "'";
                 break;
             case "Preso con Código:":
-                consulta = "Select * from preso where codigo_preso = '" + jTextFieldConsultaPreso.getText() + "';";
+                consulta = "Select * from preso where codigo_preso = '" + jTextFieldConsultaPreso.getText() + "'";
                 break;
             case "Presos con Nombre:":
-                consulta = "Select * from preso where nombre = '" + jTextFieldConsultaPreso.getText() + "';";
+                consulta = "Select * from preso where nombre = '" + jTextFieldConsultaPreso.getText() + "'";
                 break;
             case "Presos con Apellido:":
-                consulta = "Select * from preso where apellidos = '" + jTextFieldConsultaPreso.getText() + "';";
+                consulta = "Select * from preso where apellidos = '" + jTextFieldConsultaPreso.getText() + "'";
                 break;
             case "Presos con Fecha de Nacimiento en:":
-                consulta = "Select * from preso where fecha_nacimiento = '" + jTextFieldConsultaPreso.getText() + "';";
+                consulta = "Select * from preso where fecha_nacimiento = '" + jTextFieldConsultaPreso.getText() + "'";
                 break;
             case "Presos con Nacionalidad:":
-                consulta = "Select * from preso where nacionalidad = '" + jTextFieldConsultaPreso.getText() + "';";
+                consulta = "Select * from preso where nacionalidad = '" + jTextFieldConsultaPreso.getText() + "'";
                 break;
             case "Presos con Color de piel:":
-                consulta = "Select * from preso where color_piel = '" + jTextFieldConsultaPreso.getText() + "';";
+                consulta = "Select * from preso where color_piel = '" + jTextFieldConsultaPreso.getText() + "'";
                 break;
             case "Presos con Altura:":
-                consulta = "Select * from preso where estatura = " + jTextFieldConsultaPreso.getText() + ";";
+                consulta = "Select * from preso where estatura = " + jTextFieldConsultaPreso.getText() + "";
                 break;
             case "Presos de la Banda:":
-                consulta = "Select * from preso where banda = '" + jTextFieldConsultaPreso.getText() + "';";
+                consulta = "Select * from preso where banda = '" + jTextFieldConsultaPreso.getText() + "'";
                 break;
 
         }
-        gesCon.consulta_Statement(consulta, jTable1, 1);
+        gesCon.consulta_Statement(consulta, jTable1, 2);
     }//GEN-LAST:event_jButtonBuscarPresoActionPerformed
 
     private void jButtonAtrasInsertasPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtrasInsertasPresoActionPerformed
-        cambiarPanel(jPanel1);
+        cambiarPanel(jPanelInicio);
     }//GEN-LAST:event_jButtonAtrasInsertasPresoActionPerformed
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+    private void jButtonAddPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddPresoActionPerformed
+        String _telefono = "";
+        //chequea si es el primer telefono que se ha introducido para colocar correctamente la consulta 
+        boolean primero = true;
+        
         String _codigo_preso = jTextField28.getText().trim();
         String _dni = jTextField8.getText().trim();
         String _nombre = jTextField18.getText().trim();
@@ -1124,18 +1226,104 @@ public class MiFrame extends javax.swing.JFrame {
         String _banda = jTextField27.getText().trim();
         String _fotoPreso = jTextField29.getText().trim();
         
+        if(!jTextField30.getText().trim().equals("")){
+            _telefono =  "telefono('Movil','"+jTextField30.getText()+"')";
+            primero = false;
+        }
+        if(!jTextField31.getText().trim().equals("")){
+            if(primero){
+             _telefono =  "telefono('Abogado','"+jTextField31.getText()+"')";
+                primero = false;
+            }else { _telefono = _telefono + ",telefono('Abogado','"+jTextField31.getText()+"')";}      
+        }
+        if(!jTextField32.getText().trim().equals("")){
+             if(primero){
+               _telefono =  "telefono('Familiar','"+jTextField32.getText()+"')";
+            }else { _telefono = _telefono + ",telefono('Familiar','"+jTextField32.getText()+"')";}  
+        }
+        
         gesCon.insertarPreso(_codigo_preso, _dni, _nombre, _apellidos, _fecha_nacimiento, _lugar_nacimiento, 
-                _nacionalidad, _estatura, _color_piel, _banda, _fotoPreso);
+                _nacionalidad, _estatura, _color_piel, _banda, _fotoPreso, _telefono);
         cargaPerfilPreso(_codigo_preso);
-        cambiarPanel(jPanel2);
+        cambiarPanel(jPanelPerfilPreso);
         //actualizamos la variable preso para que se pueden realizar los insert a continuacion si se le quieren añadir delitos
         //al preso que se acaba de crear 
         preso = _codigo_preso;
-    }//GEN-LAST:event_jButton13ActionPerformed
+    }//GEN-LAST:event_jButtonAddPresoActionPerformed
 
     private void jButtonNuevoPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevoPresoActionPerformed
-        cambiarPanel(jPanel4);
+        cambiarPanel(jPanelAddPreso);
     }//GEN-LAST:event_jButtonNuevoPresoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+          String _codigo_preso = jTextFieldCodigoPresoPerfil.getText().trim();
+        String _dni = jTextFieldDniPresoPerfil.getText().trim();
+        String _nombre = jTextFieldNombrePresoPerfil.getText().trim();
+        String _apellidos = jTextFieldApellidoPresoPerfil.getText().trim();
+        Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+        String nacimiento = formatter.format(jDateChooser1.getDate());
+        String _fecha_nacimiento = nacimiento;
+  
+        String _nacionalidad = jTextFieldNacionalidadPresoPerfil.getText().trim();
+        String _estatura = jTextFieldAlturaPresoPerfil.getText().trim();
+        String _color_piel = jTextFieldPielPresoPerfil.getText().trim();
+        String _banda = jTextFieldPielPresoPerfil.getText().trim();
+   
+        int modificacion = gesCon.modificarDatosPreso(_codigo_preso,_dni,_nombre,_apellidos,_fecha_nacimiento,_nacionalidad,_estatura,_color_piel,_banda);
+        if(modificacion == 0 ){
+            jLabelErrorPerfil.setText("Se han modificado los datos correctamente");
+        } else {
+            jLabelErrorPerfil.setText("Se ha producido un error al modificar los datos");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        jDialogModificarTelefono.setVisible(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButtonModificarTelPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarTelPresoActionPerformed
+       jDialogModificarTelefono.setLocationRelativeTo(null);
+        jDialogModificarTelefono.setVisible(true);
+        cargaTelefonos();
+        //reseteamos las variables
+        nuevoTelAbogado = true; nuevoTelFamiliar = true; nuevoTelMovil = true;
+        
+        if(!jTextField2.getText().trim().equals("")){
+            nuevoTelMovil = false;
+        }
+        if(!jTextField3.getText().trim().equals("")){
+            nuevoTelAbogado = false;
+        }
+        if(!jTextField4.getText().trim().equals("")){
+            nuevoTelFamiliar = false;
+        }
+        
+        
+    }//GEN-LAST:event_jButtonModificarTelPresoActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        String telMovil = jTextField2.getText();
+        String telAbogado = jTextField3.getText();
+        String telFamiliar = jTextField4.getText();
+        
+        //Condiciones para que en el caso de que no hubiera un telefon creado de ese tipo o estuviera en blanco
+        //y posteriormente al dar al boton de modificar telefonos sigue en blanco para que no modifique ni cree nada para ese tipo
+        boolean actuarMovil = true; boolean actuarAbogado = true; boolean actuarFamiliar = true;
+        
+         if(telMovil.equals("") & nuevoTelMovil){
+            actuarMovil = false;
+        }
+        if(telAbogado.equals("") & nuevoTelAbogado){
+           actuarAbogado = false;
+        }
+        if(telFamiliar.equals("") & nuevoTelFamiliar){
+            actuarFamiliar = false;
+        }
+   
+        gesCon.modificarTelefono(preso,telMovil,telAbogado,telFamiliar,nuevoTelMovil,nuevoTelAbogado,nuevoTelFamiliar,actuarMovil,actuarAbogado,actuarFamiliar);
+        
+        jDialogModificarTelefono.setVisible(false);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     private void reseteTextBusquedaAvanzada() {
         jTextField15.setText("");
@@ -1153,6 +1341,17 @@ public class MiFrame extends javax.swing.JFrame {
 
     }
 
+    public void cargaTelefonos(){
+        //Reseteamos los textField en caso de que esten los datos de otro pereso que hayamos consultado antes 
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        
+        jTextField2.setText(gesCon.cargarTelefonoPreso(preso, "Movil"));
+        jTextField3.setText(gesCon.cargarTelefonoPreso(preso, "Abogado"));
+        jTextField4.setText(gesCon.cargarTelefonoPreso(preso, "Familiar"));
+    }
+    
     //Metodo para actualizar todos los datos del perfil de un preso cuando hacemos clikc derecho sobre este en la primera tabla
     public void cargaPerfilPreso(String preso) {
         List datosPreso = new ArrayList();
@@ -1163,7 +1362,7 @@ public class MiFrame extends javax.swing.JFrame {
             Statement s = gesCon.conn1.createStatement();
             //Ejecutamos la consulta que escribimos en la caja de texto
             //y los datos lo almacenamos en un ResultSet
-            ResultSet rs = s.executeQuery("Select * from preso where codigo_preso = '" + preso + "';");
+            ResultSet rs = s.executeQuery("Select * from preso where codigo_preso = '" + preso + "'");
             //Obteniendo la informacion de las columnas que estan siendo consultadas
             ResultSetMetaData rsMd = rs.getMetaData();
             //La cantidad de columnas que tiene la consulta
@@ -1172,25 +1371,58 @@ public class MiFrame extends javax.swing.JFrame {
             //guardamos los datos del preso en array para luego colocarlos en los jtextfields
             while (rs.next()) {
                 for (int j = 0; j < cantidadColumnas; j++) {
+                    
+                    if(j==4){
+                    datosPreso.add(rs.getDate(1 + j));
+                    }else {
                     datosPreso.add(rs.getString(1 + j));
+                    }
                 }
             }
             rs.close();
             s.close();
 
-            jTextFieldCodigoPreso.setText(datosPreso.get(0).toString());
-            jTextFieldDniPreso.setText(datosPreso.get(1).toString());
-            jTextFieldNombrePreso.setText(datosPreso.get(2).toString());
-            jTextFieldApellidoPreso.setText(datosPreso.get(3).toString());
-            jTextFieldNacimientoPreso.setText(datosPreso.get(4).toString());
-            jTextFieldNacionalidadPreso.setText(datosPreso.get(6).toString());
-            jTextFieldAlturaPreso.setText(datosPreso.get(7).toString());
-            jTextFieldPielPreso.setText(datosPreso.get(8).toString());
+            jTextFieldCodigoPresoPerfil.setText(datosPreso.get(0).toString());
+            jTextFieldDniPresoPerfil.setText(datosPreso.get(1).toString());
+            jTextFieldNombrePresoPerfil.setText(datosPreso.get(2).toString());
+            jTextFieldApellidoPresoPerfil.setText(datosPreso.get(3).toString());
+            jDateChooser1.setDate((Date)datosPreso.get(4));
+            jTextFieldNacionalidadPresoPerfil.setText(datosPreso.get(6).toString());
+            jTextFieldAlturaPresoPerfil.setText(datosPreso.get(7).toString());
+            jTextFieldPielPresoPerfil.setText(datosPreso.get(8).toString());
             jTextFieldBandaPreso.setText(datosPreso.get(9).toString());
+            
+            jComboBox1.removeAllItems();
+                
+             List listaTelefono = new ArrayList();
+            s = gesCon.conn1.createStatement();
+            //los telefonos al ser una nested table no sabemos cuantos son, hacemos una consulta del tipo de telefono y el numero
+            //que tiene separados por un doble concat, no deja hacer un concat de mas de dos valores, y luego se lo añadimos al combobox
+            //del perfil del preso en el que nos encontramos
+            rs = s.executeQuery("select CONCAT(concat(t.tipo,'     '), t.Num_telefono) from preso p, table(p.telefono) t where p.codigo_preso = '"+preso+"'");
+            rsMd = rs.getMetaData();
+            cantidadColumnas = rsMd.getColumnCount();
+            while (rs.next()) {
+                for (int j = 0; j < cantidadColumnas; j++) {
+                    listaTelefono.add(rs.getString(1 + j));
+                }
+            }
+            rs.close();
+            s.close();
+            
+            for(int i=0; i<listaTelefono.size(); i++){
+                 jComboBox1.addItem(listaTelefono.get(i).toString());
+            }
+  
+                actualizarFoto(datosPreso.get(11).toString());
+            
+            
 
-            actualizarFoto(datosPreso.get(10).toString());
-
-            gesCon.consulta_Statement("Select * from preso_delito where codigo_preso = '" + preso + "';", jTable2, 0);
+//            gesCon.consulta_Statement("Select * from preso_delito where codigo_preso = '" + preso + "';", jTable2, 0);
+            
+                gesCon.consulta_Statement("select p.codigo_preso.codigo_preso, p.codigo_delito.codigo_delito,"
+               + " P.CIRCUSTANCIAS, P.UBICACION from preso_delito p where p.codigo_preso = (SELECT REF(pres) "
+                + "FROM preso pres where pres.codigo_preso ='"+ preso +"')", jTable2, 0);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1264,25 +1496,33 @@ public class MiFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButtonAceptarAddDelito;
+    private javax.swing.JButton jButtonAddPreso;
     private javax.swing.JButton jButtonAtrasInsertasPreso;
     private javax.swing.JButton jButtonAtrasPerfilPreso;
     private javax.swing.JButton jButtonBuscarPreso;
     private javax.swing.JButton jButtonBusquedaAvanzada;
     private javax.swing.JButton jButtonCancelarAddDelito;
     private javax.swing.JButton jButtonEliminarPreso;
+    private javax.swing.JButton jButtonModificarTelPreso;
     private javax.swing.JButton jButtonNuevoPreso;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBoxConsultaPresos;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JDialog jDialogBusquedaAvanzada;
     private javax.swing.JDialog jDialogInsertarDelito;
+    private javax.swing.JDialog jDialogModificarTelefono;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1314,12 +1554,19 @@ public class MiFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1327,11 +1574,11 @@ public class MiFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelErrorInsetarDelito;
     private javax.swing.JLabel jLabelErrorPerfil;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanelAddDelito;
+    private javax.swing.JPanel jPanelAddPreso;
     private javax.swing.JPanel jPanelContenedor;
+    private javax.swing.JPanel jPanelInicio;
+    private javax.swing.JPanel jPanelPerfilPreso;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1358,6 +1605,7 @@ public class MiFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField18;
     private javax.swing.JTextField jTextField19;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField20;
     private javax.swing.JTextField jTextField21;
     private javax.swing.JTextField jTextField22;
@@ -1368,16 +1616,20 @@ public class MiFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField27;
     private javax.swing.JTextField jTextField28;
     private javax.swing.JTextField jTextField29;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField30;
+    private javax.swing.JTextField jTextField31;
+    private javax.swing.JTextField jTextField32;
+    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextFieldAlturaPreso;
-    private javax.swing.JTextField jTextFieldApellidoPreso;
+    private javax.swing.JTextField jTextFieldAlturaPresoPerfil;
+    private javax.swing.JTextField jTextFieldApellidoPresoPerfil;
     private javax.swing.JTextField jTextFieldBandaPreso;
-    private javax.swing.JTextField jTextFieldCodigoPreso;
+    private javax.swing.JTextField jTextFieldCodigoPresoPerfil;
     private javax.swing.JTextField jTextFieldConsultaPreso;
-    private javax.swing.JTextField jTextFieldDniPreso;
-    private javax.swing.JTextField jTextFieldNacimientoPreso;
-    private javax.swing.JTextField jTextFieldNacionalidadPreso;
-    private javax.swing.JTextField jTextFieldNombrePreso;
-    private javax.swing.JTextField jTextFieldPielPreso;
+    private javax.swing.JTextField jTextFieldDniPresoPerfil;
+    private javax.swing.JTextField jTextFieldNacionalidadPresoPerfil;
+    private javax.swing.JTextField jTextFieldNombrePresoPerfil;
+    private javax.swing.JTextField jTextFieldPielPresoPerfil;
     // End of variables declaration//GEN-END:variables
 }
